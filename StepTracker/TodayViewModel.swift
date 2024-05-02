@@ -93,7 +93,7 @@ class TodayViewModel: ObservableObject {
                 self?.stepCountsPerHour = self?.convertDateIntoString(stepCounts: stepCounts) ?? []
                 self?.totalNumberOfStepsDuringTheDay = self?.stepCountsPerHour.reduce(0) { $0 + $1.numberOfSteps } ?? 0
                 // TODO: Save locally using user defaults.
-//                self?.saveOrUpdateStepCounts(stepCounts)
+                //                self?.saveOrUpdateStepCounts(stepCounts)
             }
         }
         

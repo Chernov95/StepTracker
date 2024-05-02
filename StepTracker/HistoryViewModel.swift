@@ -155,7 +155,7 @@ class HistoryViewModel: ObservableObject {
     //MARK: For testing purposes on simulator
     func generateMockMonthlyStepCount() {
         var activityForTheMonthTemp = [MonthlyActivity]()
-
+        
         for date in 1...31 {
             let activity = MonthlyActivity(date: date, numberOfSteps: Int.random(in: 0...15000))
             activityForTheMonthTemp.append(activity)

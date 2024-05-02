@@ -16,27 +16,25 @@ struct ContentView: View {
     
     var body: some View {
         VStack {
-            VStack {
-                HStack {
-                    Picker("", selection: $selectedTab.animation()) {
-                        Text(Tabs.today.rawValue)
-                            .tag(Tabs.today)
-                        Text(Tabs.history.rawValue)
-                            .tag(Tabs.history)
-                    }
-                    .pickerStyle(.segmented)
-                    .frame(width: pickerWidth)
-                    Spacer()
+            HStack {
+                Picker("", selection: $selectedTab.animation()) {
+                    Text(Tabs.today.rawValue)
+                        .tag(Tabs.today)
+                    Text(Tabs.history.rawValue)
+                        .tag(Tabs.history)
                 }
-                .padding(.leading, pickerContainerLeadingPadding)
-                Spacer()
-                if selectedTab == .today {
-                    TodayView()
-                } else {
-                    HistoryView()
-                }
+                .pickerStyle(.segmented)
+                .frame(width: pickerWidth)
                 Spacer()
             }
+            .padding(.leading, pickerContainerLeadingPadding)
+            Spacer()
+            if selectedTab == .today {
+                TodayView()
+            } else {
+                HistoryView()
+            }
+            Spacer()
         }
         .padding(.top, containerTopPadding)
     }

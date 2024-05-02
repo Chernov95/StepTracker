@@ -32,7 +32,7 @@ struct HistoryView: View {
         if selectedPeriod == .weekly {
             if viewModel.activityForTheWeek.isEmpty {
                 viewModel.queryWeeklyStepCount()
-//                viewModel.generateMockWeeklyStepCount()
+                //                viewModel.generateMockWeeklyStepCount()
                 return AnyView(ProgressView())
             } else {
                 return AnyView(
@@ -54,7 +54,7 @@ struct HistoryView: View {
         } else {
             if viewModel.activityForTheMonth.isEmpty {
                 viewModel.queryMonthlyStepCount()
-//                viewModel.generateMockMonthlyStepCount()
+                //                viewModel.generateMockMonthlyStepCount()
                 return AnyView(ProgressView())
             } else {
                 return AnyView(Chart(viewModel.activityForTheMonth, id: \.date) { day in
