@@ -22,23 +22,19 @@ class HistoryViewModel: ObservableObject {
     let constants = Constants()
     
     func queryWeeklyStepCount() {
-        // Define the date range for which you want to fetch step count data (e.g., current week from Monday to Sunday)
         var calendar = Calendar.current
         calendar.firstWeekday = 2 // Set Monday as the first day of the week
         
         let now = Date()
         
-        // Find the beginning of the current week (Monday)
-        guard let startOfWeek = calendar.date(from: calendar.dateComponents([.yearForWeekOfYear, .weekOfYear], from: now)) else {
-            print("Failed to calculate the beginning of the week.")
+        // Get the start and end dates of the current week
+        guard let weekInterval = calendar.dateInterval(of: .weekOfYear, for: now) else {
+            print("Failed to calculate the current week.")
             return
         }
         
-        // Find the end of the current week (Sunday)
-        guard let endOfWeek = calendar.date(byAdding: .day, value: 6, to: startOfWeek) else {
-            print("Failed to calculate the end of the week.")
-            return
-        }
+        let startOfWeek = weekInterval.start
+        let endOfWeek = weekInterval.end
         
         // Define the daily interval
         var dateComponents = DateComponents()
@@ -63,14 +59,16 @@ class HistoryViewModel: ObservableObject {
             }
             
             statsCollection.enumerateStatistics(from: startOfWeek, to: endOfWeek) { statistics, _ in
-                if let sum = statistics.sumQuantity() {
-                    let date = statistics.startDate
-                    let dayName = calendar.shortWeekdaySymbols[calendar.component(.weekday, from: date) - 1]
-                    let stepCount = Int(sum.doubleValue(for: HKUnit.count()))
-                    
-                    let weeklyActivity = WeeklyActivity(dayName: dayName, numberOfSteps: stepCount)
-                    activityForTheWeek.append(weeklyActivity)
-                }
+                guard let sum = statistics.sumQuantity()else { return }
+                let date = statistics.startDate
+                // Skip statistics for future dates
+                guard date <= now else { return }
+                
+                let dayName = calendar.shortWeekdaySymbols[calendar.component(.weekday, from: date) - 1]
+                let stepCount = Int(sum.doubleValue(for: HKUnit.count()))
+                
+                let weeklyActivity = WeeklyActivity(dayName: dayName, numberOfSteps: stepCount)
+                activityForTheWeek.append(weeklyActivity)
             }
             
             // Update the published property on the main thread
@@ -84,7 +82,6 @@ class HistoryViewModel: ObservableObject {
     }
     
     func queryMonthlyStepCount() {
-        // Define the date range for which you want to fetch step count data (e.g., current month from 1st day to last day)
         let calendar = Calendar.current
         let now = Date()
         
@@ -123,13 +120,16 @@ class HistoryViewModel: ObservableObject {
             }
             
             statsCollection.enumerateStatistics(from: startOfMonth, to: endOfMonth) { statistics, _ in
-                if let sum = statistics.sumQuantity() {
-                    let date = calendar.component(.day, from: statistics.startDate)
-                    let stepCount = Int(sum.doubleValue(for: HKUnit.count()))
-                    
-                    let monthlyActivity = MonthlyActivity(date: date, numberOfSteps: stepCount)
-                    activityForTheMonth.append(monthlyActivity)
-                }
+                guard let sum = statistics.sumQuantity() else { return }
+                let date = statistics.startDate
+                // Skip statistics for future dates
+                guard date <= now else { return }
+                
+                let day = calendar.component(.day, from: date)
+                let stepCount = Int(sum.doubleValue(for: HKUnit.count()))
+                
+                let monthlyActivity = MonthlyActivity(date: day, numberOfSteps: stepCount)
+                activityForTheMonth.append(monthlyActivity)
             }
             
             // Update the published property on the main thread
