@@ -8,7 +8,8 @@
 import SwiftUI
 
 struct HistoryView: View {
+    @StateObject var viewModel = HistoryViewModel()
     var body: some View {
-    Text("History")
+        Text("History")
     }
 }
