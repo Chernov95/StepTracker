@@ -32,6 +32,7 @@ struct HistoryView: View {
         if selectedPeriod == .weekly {
             if viewModel.activityForTheWeek.isEmpty {
                 viewModel.queryWeeklyStepCount()
+//                viewModel.generateMockWeeklyStepCount()
                 return AnyView(ProgressView())
             } else {
                 return AnyView(
@@ -46,15 +47,17 @@ struct HistoryView: View {
                         }
                         .foregroundStyle(.blue.gradient)
                     }
+                        .chartScrollableAxes(.horizontal)
+                        .chartXVisibleDomain(length: viewModel.constants.chartVisibleDomainLength)
                 )
             }
         } else {
             if viewModel.activityForTheMonth.isEmpty {
                 viewModel.queryMonthlyStepCount()
+//                viewModel.generateMockMonthlyStepCount()
                 return AnyView(ProgressView())
             } else {
                 return AnyView(Chart(viewModel.activityForTheMonth, id: \.date) { day in
-                    
                     BarMark(
                         x: .value(viewModel.constants.dateTitle, day.date),
                         y: .value(viewModel.constants.stepsTitle, day.numberOfSteps),
@@ -64,8 +67,9 @@ struct HistoryView: View {
                         Text("\(day.numberOfSteps)")
                     }
                     .foregroundStyle(.blue.gradient)
-                    
                 }
+                    .chartScrollableAxes(.horizontal)
+                    .chartXVisibleDomain(length: viewModel.constants.chartVisibleDomainLength)
                 )
             }
         }

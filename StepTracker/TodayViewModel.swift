@@ -19,12 +19,13 @@ class TodayViewModel: ObservableObject {
     
     let targetNumberOfSteps = 10_000
     let constants = Constants()
+    var hourlyActivities = [HourlyActivity]()
     
     init() {
-        requestHealthDataAuthorization()
+        requestHealthDataAuthorizationAndQueryDailyStepCount()
     }
     
-    func requestHealthDataAuthorization() {
+    func requestHealthDataAuthorizationAndQueryDailyStepCount() {
         guard HKHealthStore.isHealthDataAvailable() else {
             print("DEBUG:: HealthKit is not available on this device.")
             return
@@ -149,6 +150,19 @@ class TodayViewModel: ObservableObject {
         }
         defaults.set(existingStepCounts, forKey: dateString)
     }
+    
+    //MARK: For testing purposes on simulator
+    private func generateMockDailyStepCount() {
+        let hours = ["12:00 am", "01:00 am", "02:00 am", "03:00 am", "04:00 am", "05:00 am", "06:00 am", "07:00 am", "08:00 am", "09:00 am", "10:00 am", "11:00 am",
+                     "12:00 pm", "01:00 pm", "02:00 pm", "03:00 pm", "04:00 pm", "05:00 pm", "06:00 pm", "07:00 pm", "08:00 pm", "09:00 pm", "10:00 pm", "11:00 pm"]
+        
+        var stepCountsPerHourTemp = [HourlyActivity]()
+        for hour in hours {
+            let activity = HourlyActivity(time: hour, numberOfSteps: Int.random(in: 0...5000))
+            stepCountsPerHourTemp.append(activity)
+        }
+        stepCountsPerHour = stepCountsPerHourTemp
+    }
 }
 
 extension TodayViewModel {
@@ -158,5 +172,6 @@ extension TodayViewModel {
         let hourTitle = "Hour"
         let trailingPaddingForStepsText: CGFloat = 45
         let barMarkWidth: MarkDimension = 50
+        let chartVisibleDomainLength = 4
     }
 }

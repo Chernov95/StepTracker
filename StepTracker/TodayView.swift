@@ -34,10 +34,11 @@ struct TodayView: View {
                     .annotation(position: .top) {
                         Text("\(hour.numberOfSteps)")
                     }
+                    .foregroundStyle(.blue.gradient)
                 }
                 .padding(.horizontal)
-                //                .chartScrollableAxes(.horizontal)
-                .frame(alignment: .leading)
+                .chartScrollableAxes(.horizontal)
+                .chartXVisibleDomain(length: viewModel.constants.chartVisibleDomainLength)
             }
         }
     }

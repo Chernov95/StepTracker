@@ -141,6 +141,27 @@ class HistoryViewModel: ObservableObject {
         // Execute the query
         healthStore.execute(query)
     }
+    //MARK: For testing purposes on simulator
+    func generateMockWeeklyStepCount() {
+        let dayNames = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
+        var activityForTheWeekTemp = [WeeklyActivity]()
+        for day in dayNames {
+            let activity = WeeklyActivity(dayName: day, numberOfSteps: Int.random(in: 0...10000))
+            activityForTheWeekTemp.append(activity)
+        }
+        activityForTheWeek = activityForTheWeekTemp
+    }
+    
+    //MARK: For testing purposes on simulator
+    func generateMockMonthlyStepCount() {
+        var activityForTheMonthTemp = [MonthlyActivity]()
+
+        for date in 1...31 {
+            let activity = MonthlyActivity(date: date, numberOfSteps: Int.random(in: 0...15000))
+            activityForTheMonthTemp.append(activity)
+        }
+        activityForTheMonth = activityForTheMonthTemp
+    }
 }
 
 extension HistoryViewModel {
@@ -149,5 +170,6 @@ extension HistoryViewModel {
         let stepsTitle = "Steps"
         let dateTitle = "Date"
         let barMarkWidth: MarkDimension = 50
+        let chartVisibleDomainLength = 4
     }
 }
