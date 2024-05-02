@@ -10,78 +10,63 @@ import Charts
 
 struct HistoryView: View {
     @StateObject private var viewModel = HistoryViewModel()
-    @State private var sevenDaysActivityIsDisplayed = true
+  
     var body: some View {
         VStack {
             HStack {
-                getButton(withTitle: "7 Days") {
-                    sevenDaysActivityIsDisplayed = true
-                    if viewModel.activityForTheWeek.isEmpty {
-                        viewModel.queryWeeklyStepCount()
-                    }
+                Picker("", selection: $viewModel.selectedPeriod) {
+                    Text(Periods.weekly.rawValue)
+                        .tag(Periods.weekly)
+                    Text(Periods.monthly.rawValue)
+                        .tag(Periods.monthly)
                 }
-                .background(sevenDaysActivityIsDisplayed ? Color.blue : Color.white)
-                .foregroundColor(sevenDaysActivityIsDisplayed ? Color.white : Color.black)
-                getButton(withTitle: "30 Days") {
-                    sevenDaysActivityIsDisplayed = false
-                    if viewModel.activityForTheMonth.isEmpty {
-                        viewModel.queryMonthlyStepCount()
-                    }
-                }
-                .background(sevenDaysActivityIsDisplayed ? Color.white : Color.blue)
-                .foregroundColor(sevenDaysActivityIsDisplayed ? Color.black : Color.white)
-                Spacer()
+                .pickerStyle(.segmented)
+                .padding(.horizontal)
             }
-            .padding(.leading)
-            displayBarChart(for: sevenDaysActivityIsDisplayed ? .weekly : .monthly)
+            displayBarChart(for: viewModel.selectedPeriod)
             Spacer()
         }
-        .onAppear {
-            if sevenDaysActivityIsDisplayed && viewModel.activityForTheWeek.isEmpty   {
-                viewModel.queryWeeklyStepCount()
-            } else if !sevenDaysActivityIsDisplayed && viewModel.activityForTheMonth.isEmpty {
-                viewModel.queryMonthlyStepCount()
-            }
-        }
     }
-    
-    private func getButton(withTitle title : String, action: @escaping () -> ()) -> some View {
-        Button(action: {
-            action()
-        }, label: {
-            Text(title)
-        })
-        .frame(width: 70, height: 50)
-    }
-    
-    private func displayBarChart(for barChartType: BarChartType) -> some View {
-        if barChartType == .weekly {
+
+    private func displayBarChart(for selectedPeriod: Periods) -> some View {
+        if selectedPeriod == .weekly {
             if viewModel.activityForTheWeek.isEmpty {
+                viewModel.queryWeeklyStepCount()
                 return AnyView(ProgressView())
             } else {
                 return AnyView(Chart(viewModel.activityForTheWeek, id: \.dayName) { day in
                     BarMark(
-                        x: .value("Day", day.dayName),
-                        y: .value("Steps", day.numberOfSteps)
+                        x: .value(viewModel.constants.dayTitle, day.dayName),
+                        y: .value(viewModel.constants.stepsTitle, day.numberOfSteps)
                     )
-                })
+                    .annotation(position: .top) {
+                        Text("\(day.numberOfSteps)")
+                    }
+                    .foregroundStyle(.blue.gradient)
+                    
+                }
+                    .animation(.easeInOut, value: 0.6)
+                )
             }
         } else {
             if viewModel.activityForTheMonth.isEmpty {
+                viewModel.queryMonthlyStepCount()
                 return AnyView(ProgressView())
             } else {
                 return AnyView(Chart(viewModel.activityForTheMonth, id: \.date) { day in
                     BarMark(
-                        x: .value("Date", day.date),
-                        y: .value("Steps", day.numberOfSteps)
+                        x: .value(viewModel.constants.dateTitle, day.date),
+                        y: .value(viewModel.constants.stepsTitle, day.numberOfSteps)
                     )
-                })
+                    .annotation(position: .top) {
+                        Text("\(day.numberOfSteps)")
+                    }
+                    .foregroundStyle(.blue.gradient)
+                }
+                    .animation(.easeInOut, value: 0.6)
+                )
             }
         }
-    }
-
-    private enum BarChartType {
-        case weekly, monthly
     }
 }
 

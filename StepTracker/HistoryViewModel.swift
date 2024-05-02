@@ -8,10 +8,17 @@
 import Foundation
 import HealthKit
 
+enum Periods: String {
+    case weekly = "7 Days"
+    case monthly = "1 Month"
+}
+
 class HistoryViewModel: ObservableObject {
     private let healthStore = HKHealthStore()
+    @Published var selectedPeriod: Periods = .weekly
     @Published var activityForTheWeek = [WeeklyActivity]()
     @Published var activityForTheMonth = [MonthlyActivity]()
+    let constants = Constants()
     
     func queryWeeklyStepCount() {
         // Define the date range for which you want to fetch step count data (e.g., current week from Monday to Sunday)
@@ -132,5 +139,13 @@ class HistoryViewModel: ObservableObject {
         
         // Execute the query
         healthStore.execute(query)
+    }
+}
+
+extension HistoryViewModel {
+    struct Constants {
+        let dayTitle = "Day"
+        let stepsTitle = "Steps"
+        let dateTitle = "Date"
     }
 }

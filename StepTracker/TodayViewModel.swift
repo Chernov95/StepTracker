@@ -15,7 +15,13 @@ class TodayViewModel: ObservableObject {
     // Published property to notify views about changes in step count data
     @Published var stepCountsPerHour: [HourlyActivity] = []
     @Published var totalNumberOfStepsDuringTheDay = 0
+    
     let targetNumberOfSteps = 10_000
+    let constants = Constants()
+    
+    init() {
+        requestHealthDataAuthorization()
+    }
     
     private func requestHealthDataAuthorization() {
         guard HKHealthStore.isHealthDataAvailable() else {
@@ -141,5 +147,14 @@ class TodayViewModel: ObservableObject {
             existingStepCounts[formattedHour] = stepCount
         }
         defaults.set(existingStepCounts, forKey: dateString)
+    }
+}
+
+extension TodayViewModel {
+    struct Constants {
+        let dayTitle = "Day"
+        let stepsTitle = "Steps"
+        let hourTitle = "Hour"
+        let trailingPaddingForStepsText: CGFloat = 45
     }
 }

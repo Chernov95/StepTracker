@@ -13,28 +13,30 @@ struct TodayView: View {
     var body: some View {
         if viewModel.stepCountsPerHour.isEmpty {
             ProgressView()
-                .onAppear {
-                    viewModel.queryDailyStepCount()
-                }
         } else {
             VStack {
                 Text("\(viewModel.totalNumberOfStepsDuringTheDay)")
                     .foregroundStyle(.black)
                     .font(.largeTitle)
-                Text("Steps")
-                ProgressBar(percent: CGFloat(viewModel.getPercentOfCompletedSteps()))
+                Text(viewModel.constants.stepsTitle)
+                ProgressBar(percent: viewModel.getPercentOfCompletedSteps())
                 HStack {
                     Spacer()
-                    Text("\(viewModel.targetNumberOfSteps) Steps")
-                        .padding(.trailing, 45)
+                    Text("\(viewModel.targetNumberOfSteps) \(viewModel.constants.stepsTitle)")
+                        .padding(.trailing, viewModel.constants.trailingPaddingForStepsText)
                 }
                 Chart(viewModel.stepCountsPerHour, id: \.time) { hour in
                     BarMark(
-                        x: .value("Hour", hour.time),
-                        y: .value("Steps", hour.numberOfSteps)
+                        x: .value(viewModel.constants.hourTitle, hour.time),
+                        y: .value(viewModel.constants.stepsTitle, hour.numberOfSteps)
                     )
+                    .annotation(position: .top) {
+                        Text("\(hour.numberOfSteps)")
+                    }
+                    .foregroundStyle(.blue.gradient)
                 }
-                .chartScrollableAxes(.horizontal)
+                .padding(.horizontal)
+//                .chartScrollableAxes(.horizontal)
             }
         }
     }

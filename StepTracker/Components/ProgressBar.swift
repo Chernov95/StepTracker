@@ -11,7 +11,7 @@ struct ProgressBar: View {
     private let width: CGFloat = 300
     private let height: CGFloat = 50
     @State private var animationProgress: CGFloat = 0
-    var percent: CGFloat = 69
+    var percent: Int = 69
     
     var body: some View {
         ZStack(alignment: .leading) {
@@ -28,7 +28,7 @@ struct ProgressBar: View {
                 .foregroundColor(.blue)
                 .onAppear {
                     withAnimation(.linear(duration: 0.5)) {
-                        animationProgress = percent
+                        animationProgress = CGFloat(percent)
                     }
                 }
         }

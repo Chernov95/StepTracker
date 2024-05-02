@@ -9,29 +9,28 @@ import SwiftUI
 import Charts
 
 struct ContentView: View {
-    @State var todayButtonIsSelected = true
-
+    @State private var selectedTab: Tabs = .today
+    private let pickerWidth: CGFloat = 200
+    private let pickerContainerLeadingPadding: CGFloat = 10
+    private let containerTopPadding: CGFloat = 50
+    
     var body: some View {
         VStack {
             VStack {
                 HStack {
-                        Button("Today") {
-                            todayButtonIsSelected = true
-                        }
-                        .padding()
-                        .background(todayButtonIsSelected ? Color.blue : Color.white)
-                        .foregroundColor(todayButtonIsSelected ? Color.white : Color.black)
-                        Button("History") {
-                            todayButtonIsSelected = false
-                        }
-                        .padding()
-                        .background(!todayButtonIsSelected ? Color.blue : Color.white)
-                        .foregroundColor(!todayButtonIsSelected ? Color.white : Color.black)
+                    Picker("", selection: $selectedTab) {
+                        Text(Tabs.today.rawValue)
+                            .tag(Tabs.today)
+                        Text(Tabs.history.rawValue)
+                            .tag(Tabs.history)
+                    }
+                    .pickerStyle(.segmented)
+                    .frame(width: pickerWidth)
                     Spacer()
                 }
-                .padding(.leading, 10)
+                .padding(.leading, pickerContainerLeadingPadding)
                 Spacer()
-                if todayButtonIsSelected {
+                if selectedTab == .today {
                     TodayView()
                 } else {
                     HistoryView()
@@ -39,10 +38,12 @@ struct ContentView: View {
                 Spacer()
             }
         }
-        .padding(.top, 50)
+        .padding(.top, containerTopPadding)
     }
-    
-    
+    private enum Tabs: String {
+        case today = "Today"
+        case history = "History"
+    }
 }
 
 #Preview {
