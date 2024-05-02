@@ -15,10 +15,10 @@ enum Periods: String {
 }
 
 class HistoryViewModel: ObservableObject {
-    private let healthStore = HKHealthStore()
     @Published var selectedPeriod: Periods = .weekly
     @Published var activityForTheWeek = [WeeklyActivity]()
     @Published var activityForTheMonth = [MonthlyActivity]()
+    private let healthStore = HKHealthStore()
     let constants = Constants()
     
     func queryWeeklyStepCount() {

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C9485C462BE4319100257161 /* ContentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9485C452BE4319100257161 /* ContentViewModel.swift */; };
 		C94E295C2BE1A86E001FCD23 /* TodayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C94E295B2BE1A86E001FCD23 /* TodayView.swift */; };
 		C94E295F2BE1AC6D001FCD23 /* ProgressBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = C94E295E2BE1AC6D001FCD23 /* ProgressBar.swift */; };
 		C94E29612BE1C5D9001FCD23 /* TodayViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C94E29602BE1C5D9001FCD23 /* TodayViewModel.swift */; };
@@ -22,6 +23,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		C9485C452BE4319100257161 /* ContentViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentViewModel.swift; sourceTree = "<group>"; };
 		C94E295B2BE1A86E001FCD23 /* TodayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayView.swift; sourceTree = "<group>"; };
 		C94E295E2BE1AC6D001FCD23 /* ProgressBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressBar.swift; sourceTree = "<group>"; };
 		C94E29602BE1C5D9001FCD23 /* TodayViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayViewModel.swift; sourceTree = "<group>"; };
@@ -89,6 +91,7 @@
 				C94E29622BE310E5001FCD23 /* StepTracker.entitlements */,
 				C99FBEB02BE1A13000C15009 /* StepTrackerApp.swift */,
 				C99FBEB22BE1A13000C15009 /* ContentView.swift */,
+				C9485C452BE4319100257161 /* ContentViewModel.swift */,
 				C94E295B2BE1A86E001FCD23 /* TodayView.swift */,
 				C94E29602BE1C5D9001FCD23 /* TodayViewModel.swift */,
 				C94E29632BE31ABC001FCD23 /* HistoryView.swift */,
@@ -186,6 +189,7 @@
 				C94E296D2BE320E1001FCD23 /* MonthlyActivity.swift in Sources */,
 				C94E29612BE1C5D9001FCD23 /* TodayViewModel.swift in Sources */,
 				C94E295F2BE1AC6D001FCD23 /* ProgressBar.swift in Sources */,
+				C9485C462BE4319100257161 /* ContentViewModel.swift in Sources */,
 				C99FBEB12BE1A13000C15009 /* StepTrackerApp.swift in Sources */,
 				C94E29662BE31AD1001FCD23 /* HistoryViewModel.swift in Sources */,
 				C94E29692BE31F15001FCD23 /* HourlyActivity.swift in Sources */,

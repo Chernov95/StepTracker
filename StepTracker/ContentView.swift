@@ -9,38 +9,37 @@ import SwiftUI
 import Charts
 
 struct ContentView: View {
-    @State private var selectedTab: Tabs = .today
-    private let pickerWidth: CGFloat = 200
-    private let pickerContainerLeadingPadding: CGFloat = 16
-    private let containerTopPadding: CGFloat = 50
-    
+    @StateObject private var viewModel = ContentViewModel()
     var body: some View {
         VStack {
             HStack {
-                Picker("", selection: $selectedTab.animation()) {
+                Picker("", selection: $viewModel.selectedTab) {
                     Text(Tabs.today.rawValue)
                         .tag(Tabs.today)
                     Text(Tabs.history.rawValue)
                         .tag(Tabs.history)
                 }
                 .pickerStyle(.segmented)
-                .frame(width: pickerWidth)
+                .frame(width: viewModel.constants.pickerWidth)
                 Spacer()
             }
-            .padding(.leading, pickerContainerLeadingPadding)
+            .padding(.leading, viewModel.constants.pickerContainerLeadingPadding)
             Spacer()
-            if selectedTab == .today {
-                TodayView()
+            if viewModel.selectedTab == .today {
+                if !viewModel.stepCountsPerHour.isEmpty {
+                    TodayView(stepCountsPerHour: viewModel.stepCountsPerHour,
+                              percentOfCompletedSteps: viewModel.getPercentOfCompletedSteps(),
+                              totalNumberOfCompletedStepsDuringTheDay: viewModel.totalNumberOfCompletedStepsDuringTheDay,
+                              targetedNumberOfSteps: viewModel.targetedNumberOfSteps)
+                } else {
+                    ProgressView()
+                }
             } else {
                 HistoryView()
             }
             Spacer()
         }
-        .padding(.top, containerTopPadding)
-    }
-    private enum Tabs: String {
-        case today = "Today"
-        case history = "History"
+        .padding(.top, viewModel.constants.containerTopPadding)
     }
 }
 
