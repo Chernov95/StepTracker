@@ -6,19 +6,32 @@
 //
 
 import SwiftUI
+import Charts
 
 struct TodayView: View {
+    @StateObject private var viewModel = TodayViewModel()
     var body: some View {
-        VStack {
-            Text("2654")
-                .foregroundStyle(.black)
-                .font(.largeTitle)
-            Text("Steps")
-            ProgressBar(percent: 30)
-            HStack {
-                Spacer()
-                Text("10,000 Steps")
-                    .padding(.trailing, 45)
+        if viewModel.totalNumberOfStepsDuringTheDay == 0 {
+            ProgressView()
+        } else {
+            VStack {
+                Text("\(viewModel.totalNumberOfStepsDuringTheDay)")
+                    .foregroundStyle(.black)
+                    .font(.largeTitle)
+                Text("Steps")
+                ProgressBar(percent: CGFloat(viewModel.getPercentOfCompletedSteps()))
+                HStack {
+                    Spacer()
+                    Text("\(viewModel.targetNumberOfSteps) Steps")
+                        .padding(.trailing, 45)
+                }
+                Chart(viewModel.stepCountsPerHour, id: \.date) { hour in
+                  BarMark(
+                    x: .value("Hour", hour.date),
+                    y: .value("Steps", hour.stepCount)
+                  )
+                }
+                .chartScrollableAxes(.horizontal)
             }
         }
     }

@@ -6,9 +6,12 @@
 //
 
 import SwiftUI
+import Charts
 
 struct ContentView: View {
     @State var todayButtonIsSelected = true
+
+    
     var body: some View {
         VStack {
             VStack {
@@ -39,6 +42,8 @@ struct ContentView: View {
         }
         .padding(.top, 50)
     }
+    
+    
 }
 
 #Preview {

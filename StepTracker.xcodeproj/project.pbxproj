@@ -9,6 +9,9 @@
 /* Begin PBXBuildFile section */
 		C94E295C2BE1A86E001FCD23 /* TodayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C94E295B2BE1A86E001FCD23 /* TodayView.swift */; };
 		C94E295F2BE1AC6D001FCD23 /* ProgressBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = C94E295E2BE1AC6D001FCD23 /* ProgressBar.swift */; };
+		C94E29612BE1C5D9001FCD23 /* TodayViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C94E29602BE1C5D9001FCD23 /* TodayViewModel.swift */; };
+		C94E29642BE31ABC001FCD23 /* HistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C94E29632BE31ABC001FCD23 /* HistoryView.swift */; };
+		C94E29662BE31AD1001FCD23 /* HistoryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C94E29652BE31AD1001FCD23 /* HistoryViewModel.swift */; };
 		C99FBEB12BE1A13000C15009 /* StepTrackerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C99FBEB02BE1A13000C15009 /* StepTrackerApp.swift */; };
 		C99FBEB32BE1A13000C15009 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C99FBEB22BE1A13000C15009 /* ContentView.swift */; };
 		C99FBEB52BE1A13200C15009 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C99FBEB42BE1A13200C15009 /* Assets.xcassets */; };
@@ -18,6 +21,10 @@
 /* Begin PBXFileReference section */
 		C94E295B2BE1A86E001FCD23 /* TodayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayView.swift; sourceTree = "<group>"; };
 		C94E295E2BE1AC6D001FCD23 /* ProgressBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressBar.swift; sourceTree = "<group>"; };
+		C94E29602BE1C5D9001FCD23 /* TodayViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayViewModel.swift; sourceTree = "<group>"; };
+		C94E29622BE310E5001FCD23 /* StepTracker.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = StepTracker.entitlements; sourceTree = "<group>"; };
+		C94E29632BE31ABC001FCD23 /* HistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryView.swift; sourceTree = "<group>"; };
+		C94E29652BE31AD1001FCD23 /* HistoryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryViewModel.swift; sourceTree = "<group>"; };
 		C99FBEAD2BE1A13000C15009 /* StepTracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = StepTracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C99FBEB02BE1A13000C15009 /* StepTrackerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StepTrackerApp.swift; sourceTree = "<group>"; };
 		C99FBEB22BE1A13000C15009 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -63,9 +70,13 @@
 		C99FBEAF2BE1A13000C15009 /* StepTracker */ = {
 			isa = PBXGroup;
 			children = (
+				C94E29622BE310E5001FCD23 /* StepTracker.entitlements */,
 				C99FBEB02BE1A13000C15009 /* StepTrackerApp.swift */,
 				C99FBEB22BE1A13000C15009 /* ContentView.swift */,
 				C94E295B2BE1A86E001FCD23 /* TodayView.swift */,
+				C94E29602BE1C5D9001FCD23 /* TodayViewModel.swift */,
+				C94E29632BE31ABC001FCD23 /* HistoryView.swift */,
+				C94E29652BE31AD1001FCD23 /* HistoryViewModel.swift */,
 				C94E295D2BE1AC4F001FCD23 /* Components */,
 				C99FBEB42BE1A13200C15009 /* Assets.xcassets */,
 				C99FBEB62BE1A13200C15009 /* Preview Content */,
@@ -152,9 +163,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				C99FBEB32BE1A13000C15009 /* ContentView.swift in Sources */,
+				C94E29642BE31ABC001FCD23 /* HistoryView.swift in Sources */,
 				C94E295C2BE1A86E001FCD23 /* TodayView.swift in Sources */,
+				C94E29612BE1C5D9001FCD23 /* TodayViewModel.swift in Sources */,
 				C94E295F2BE1AC6D001FCD23 /* ProgressBar.swift in Sources */,
 				C99FBEB12BE1A13000C15009 /* StepTrackerApp.swift in Sources */,
+				C94E29662BE31AD1001FCD23 /* HistoryViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -285,12 +299,14 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = StepTracker/StepTracker.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"StepTracker/Preview Content\"";
 				DEVELOPMENT_TEAM = 3QCJKKKPU8;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHealthShareUsageDescription = "This app requires access to your step count data to provide fitness tracking features";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -314,12 +330,14 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = StepTracker/StepTracker.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"StepTracker/Preview Content\"";
 				DEVELOPMENT_TEAM = 3QCJKKKPU8;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHealthShareUsageDescription = "This app requires access to your step count data to provide fitness tracking features";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
