@@ -19,7 +19,6 @@ class TodayViewModel: ObservableObject {
     
     let targetNumberOfSteps = 10_000
     let constants = Constants()
-    var hourlyActivities = [HourlyActivity]()
     
     init() {
         requestHealthDataAuthorizationAndQueryDailyStepCount()
