@@ -9,7 +9,7 @@ import SwiftUI
 import Charts
 
 struct HistoryView: View {
-    @StateObject var viewModel = HistoryViewModel()
+    @StateObject private var viewModel = HistoryViewModel()
     @State private var sevenDaysActivityIsDisplayed = true
     var body: some View {
         VStack {
@@ -80,7 +80,7 @@ struct HistoryView: View {
         }
     }
 
-    enum BarChartType {
+    private enum BarChartType {
         case weekly, monthly
     }
 }

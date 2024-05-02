@@ -11,15 +11,11 @@ import HealthKit
 class TodayViewModel: ObservableObject {
     // HealthKit store
     private let healthStore = HKHealthStore()
-
+    
     // Published property to notify views about changes in step count data
     @Published var stepCountsPerHour: [HourlyActivity] = []
     @Published var totalNumberOfStepsDuringTheDay = 0
     let targetNumberOfSteps = 10_000
-    
-    init() {
-//        requestHealthDataAuthorization()
-    }
     
     private func requestHealthDataAuthorization() {
         guard HKHealthStore.isHealthDataAvailable() else {
@@ -66,14 +62,14 @@ class TodayViewModel: ObservableObject {
                                                 options: .cumulativeSum,
                                                 anchorDate: startDate,
                                                 intervalComponents: dateComponents)
-
+        
         // Define how the results should be grouped
         query.initialResultsHandler = { [weak self] query, results, error in
             guard let statsCollection = results else {
                 print("Failed to fetch step count data: \(error?.localizedDescription ?? "Unknown error")")
                 return
             }
-
+            
             var stepCounts: [(date: Date, stepCount: Int)] = []
             statsCollection.enumerateStatistics(from: startDate, to: endDate) { statistics, _ in
                 if let sum = statistics.sumQuantity() {
@@ -84,11 +80,13 @@ class TodayViewModel: ObservableObject {
                     stepCounts.append((date: date, stepCount: stepCount))
                 }
             }
-
+            
             // Update the published property on the main thread
             DispatchQueue.main.async {
                 self?.stepCountsPerHour = self?.convertDateIntoString(stepCounts: stepCounts) ?? []
                 self?.totalNumberOfStepsDuringTheDay = self?.stepCountsPerHour.reduce(0) { $0 + $1.numberOfSteps } ?? 0
+                // TODO: Save locally using user defaults.
+//                self?.saveOrUpdateStepCounts(stepCounts)
             }
         }
         
@@ -112,5 +110,36 @@ class TodayViewModel: ObservableObject {
     
     func getPercentOfCompletedSteps() -> Int {
         (totalNumberOfStepsDuringTheDay  * 100) / targetNumberOfSteps
+    }
+    
+    // TODO: This implementation needs testing.
+    private func saveOrUpdateStepCounts(_ stepCounts: [(date: Date, stepCount: Int)]) {
+        let defaults = UserDefaults.standard
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        
+        // Remove UserDefaults data for previous days until encountering a day without data
+        var dateToRemove = Calendar.current.date(byAdding: .day, value: -1, to: Date())
+        while let removeDate = dateToRemove {
+            let removeDateKey = dateFormatter.string(from: removeDate)
+            if defaults.object(forKey: removeDateKey) == nil {
+                break // Stop loop if there's no data for this date
+            }
+            defaults.removeObject(forKey: removeDateKey)
+            print("Removed UserDefaults data for previous day: \(removeDateKey)")
+            dateToRemove = Calendar.current.date(byAdding: .day, value: -1, to: removeDate)
+        }
+        
+        // Save or update step counts for the current day
+        let dateString = dateFormatter.string(from: Date())
+        var existingStepCounts = defaults.dictionary(forKey: dateString) as? [String: Int] ?? [:]
+        // Update or append new step counts
+        for (date, stepCount) in stepCounts {
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "h:mm a" // 'a' represents AM/PM format
+            let formattedHour = dateFormatter.string(from: date)
+            existingStepCounts[formattedHour] = stepCount
+        }
+        defaults.set(existingStepCounts, forKey: dateString)
     }
 }
