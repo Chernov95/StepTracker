@@ -11,7 +11,6 @@ import Charts
 struct ContentView: View {
     @State var todayButtonIsSelected = true
 
-    
     var body: some View {
         VStack {
             VStack {
@@ -35,7 +34,7 @@ struct ContentView: View {
                 if todayButtonIsSelected {
                     TodayView()
                 } else {
-                    
+                    HistoryView()
                 }
                 Spacer()
             }

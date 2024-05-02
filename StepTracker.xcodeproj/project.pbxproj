@@ -13,6 +13,8 @@
 		C94E29642BE31ABC001FCD23 /* HistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C94E29632BE31ABC001FCD23 /* HistoryView.swift */; };
 		C94E29662BE31AD1001FCD23 /* HistoryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C94E29652BE31AD1001FCD23 /* HistoryViewModel.swift */; };
 		C94E29692BE31F15001FCD23 /* HourlyActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = C94E29682BE31F15001FCD23 /* HourlyActivity.swift */; };
+		C94E296B2BE320C3001FCD23 /* WeeklyActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = C94E296A2BE320C3001FCD23 /* WeeklyActivity.swift */; };
+		C94E296D2BE320E1001FCD23 /* MonthlyActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = C94E296C2BE320E1001FCD23 /* MonthlyActivity.swift */; };
 		C99FBEB12BE1A13000C15009 /* StepTrackerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C99FBEB02BE1A13000C15009 /* StepTrackerApp.swift */; };
 		C99FBEB32BE1A13000C15009 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C99FBEB22BE1A13000C15009 /* ContentView.swift */; };
 		C99FBEB52BE1A13200C15009 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C99FBEB42BE1A13200C15009 /* Assets.xcassets */; };
@@ -27,6 +29,8 @@
 		C94E29632BE31ABC001FCD23 /* HistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryView.swift; sourceTree = "<group>"; };
 		C94E29652BE31AD1001FCD23 /* HistoryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryViewModel.swift; sourceTree = "<group>"; };
 		C94E29682BE31F15001FCD23 /* HourlyActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HourlyActivity.swift; sourceTree = "<group>"; };
+		C94E296A2BE320C3001FCD23 /* WeeklyActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeeklyActivity.swift; sourceTree = "<group>"; };
+		C94E296C2BE320E1001FCD23 /* MonthlyActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonthlyActivity.swift; sourceTree = "<group>"; };
 		C99FBEAD2BE1A13000C15009 /* StepTracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = StepTracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C99FBEB02BE1A13000C15009 /* StepTrackerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StepTrackerApp.swift; sourceTree = "<group>"; };
 		C99FBEB22BE1A13000C15009 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -57,6 +61,8 @@
 			isa = PBXGroup;
 			children = (
 				C94E29682BE31F15001FCD23 /* HourlyActivity.swift */,
+				C94E296A2BE320C3001FCD23 /* WeeklyActivity.swift */,
+				C94E296C2BE320E1001FCD23 /* MonthlyActivity.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -174,8 +180,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				C99FBEB32BE1A13000C15009 /* ContentView.swift in Sources */,
+				C94E296B2BE320C3001FCD23 /* WeeklyActivity.swift in Sources */,
 				C94E29642BE31ABC001FCD23 /* HistoryView.swift in Sources */,
 				C94E295C2BE1A86E001FCD23 /* TodayView.swift in Sources */,
+				C94E296D2BE320E1001FCD23 /* MonthlyActivity.swift in Sources */,
 				C94E29612BE1C5D9001FCD23 /* TodayViewModel.swift in Sources */,
 				C94E295F2BE1AC6D001FCD23 /* ProgressBar.swift in Sources */,
 				C99FBEB12BE1A13000C15009 /* StepTrackerApp.swift in Sources */,

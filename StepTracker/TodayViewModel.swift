@@ -11,15 +11,14 @@ import HealthKit
 class TodayViewModel: ObservableObject {
     // HealthKit store
     private let healthStore = HKHealthStore()
-    
+
     // Published property to notify views about changes in step count data
     @Published var stepCountsPerHour: [HourlyActivity] = []
     @Published var totalNumberOfStepsDuringTheDay = 0
     let targetNumberOfSteps = 10_000
     
-    
     init() {
-        requestHealthDataAuthorization()
+//        requestHealthDataAuthorization()
     }
     
     private func requestHealthDataAuthorization() {
@@ -67,14 +66,14 @@ class TodayViewModel: ObservableObject {
                                                 options: .cumulativeSum,
                                                 anchorDate: startDate,
                                                 intervalComponents: dateComponents)
-        
+
         // Define how the results should be grouped
         query.initialResultsHandler = { [weak self] query, results, error in
             guard let statsCollection = results else {
                 print("Failed to fetch step count data: \(error?.localizedDescription ?? "Unknown error")")
                 return
             }
-            
+
             var stepCounts: [(date: Date, stepCount: Int)] = []
             statsCollection.enumerateStatistics(from: startDate, to: endDate) { statistics, _ in
                 if let sum = statistics.sumQuantity() {
@@ -85,7 +84,7 @@ class TodayViewModel: ObservableObject {
                     stepCounts.append((date: date, stepCount: stepCount))
                 }
             }
-            
+
             // Update the published property on the main thread
             DispatchQueue.main.async {
                 self?.stepCountsPerHour = self?.convertDateIntoString(stepCounts: stepCounts) ?? []

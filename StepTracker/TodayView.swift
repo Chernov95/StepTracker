@@ -11,8 +11,11 @@ import Charts
 struct TodayView: View {
     @StateObject private var viewModel = TodayViewModel()
     var body: some View {
-        if viewModel.totalNumberOfStepsDuringTheDay == 0 {
+        if viewModel.stepCountsPerHour.isEmpty {
             ProgressView()
+                .onAppear {
+                    viewModel.queryDailyStepCount()
+                }
         } else {
             VStack {
                 Text("\(viewModel.totalNumberOfStepsDuringTheDay)")
@@ -26,10 +29,10 @@ struct TodayView: View {
                         .padding(.trailing, 45)
                 }
                 Chart(viewModel.stepCountsPerHour, id: \.time) { hour in
-                  BarMark(
-                    x: .value("Hour", hour.time),
-                    y: .value("Steps", hour.numberOfSteps)
-                  )
+                    BarMark(
+                        x: .value("Hour", hour.time),
+                        y: .value("Steps", hour.numberOfSteps)
+                    )
                 }
                 .chartScrollableAxes(.horizontal)
             }
