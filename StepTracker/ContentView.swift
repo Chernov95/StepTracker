@@ -11,14 +11,14 @@ import Charts
 struct ContentView: View {
     @State private var selectedTab: Tabs = .today
     private let pickerWidth: CGFloat = 200
-    private let pickerContainerLeadingPadding: CGFloat = 10
+    private let pickerContainerLeadingPadding: CGFloat = 16
     private let containerTopPadding: CGFloat = 50
     
     var body: some View {
         VStack {
             VStack {
                 HStack {
-                    Picker("", selection: $selectedTab) {
+                    Picker("", selection: $selectedTab.animation()) {
                         Text(Tabs.today.rawValue)
                             .tag(Tabs.today)
                         Text(Tabs.history.rawValue)

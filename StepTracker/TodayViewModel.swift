@@ -7,6 +7,7 @@
 
 import Foundation
 import HealthKit
+import Charts
 
 class TodayViewModel: ObservableObject {
     // HealthKit store
@@ -23,7 +24,7 @@ class TodayViewModel: ObservableObject {
         requestHealthDataAuthorization()
     }
     
-    private func requestHealthDataAuthorization() {
+    func requestHealthDataAuthorization() {
         guard HKHealthStore.isHealthDataAvailable() else {
             print("DEBUG:: HealthKit is not available on this device.")
             return
@@ -156,5 +157,6 @@ extension TodayViewModel {
         let stepsTitle = "Steps"
         let hourTitle = "Hour"
         let trailingPaddingForStepsText: CGFloat = 45
+        let barMarkWidth: MarkDimension = 50
     }
 }

@@ -28,15 +28,16 @@ struct TodayView: View {
                 Chart(viewModel.stepCountsPerHour, id: \.time) { hour in
                     BarMark(
                         x: .value(viewModel.constants.hourTitle, hour.time),
-                        y: .value(viewModel.constants.stepsTitle, hour.numberOfSteps)
+                        y: .value(viewModel.constants.stepsTitle, hour.numberOfSteps),
+                        width: viewModel.constants.barMarkWidth
                     )
                     .annotation(position: .top) {
                         Text("\(hour.numberOfSteps)")
                     }
-                    .foregroundStyle(.blue.gradient)
                 }
                 .padding(.horizontal)
-//                .chartScrollableAxes(.horizontal)
+                //                .chartScrollableAxes(.horizontal)
+                .frame(alignment: .leading)
             }
         }
     }

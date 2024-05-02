@@ -7,6 +7,7 @@
 
 import Foundation
 import HealthKit
+import Charts
 
 enum Periods: String {
     case weekly = "7 Days"
@@ -147,5 +148,6 @@ extension HistoryViewModel {
         let dayTitle = "Day"
         let stepsTitle = "Steps"
         let dateTitle = "Date"
+        let barMarkWidth: MarkDimension = 50
     }
 }
