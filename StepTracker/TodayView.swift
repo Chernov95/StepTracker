@@ -25,10 +25,10 @@ struct TodayView: View {
                     Text("\(viewModel.targetNumberOfSteps) Steps")
                         .padding(.trailing, 45)
                 }
-                Chart(viewModel.stepCountsPerHour, id: \.date) { hour in
+                Chart(viewModel.stepCountsPerHour, id: \.time) { hour in
                   BarMark(
-                    x: .value("Hour", hour.date),
-                    y: .value("Steps", hour.stepCount)
+                    x: .value("Hour", hour.time),
+                    y: .value("Steps", hour.numberOfSteps)
                   )
                 }
                 .chartScrollableAxes(.horizontal)

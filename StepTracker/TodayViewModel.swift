@@ -13,7 +13,7 @@ class TodayViewModel: ObservableObject {
     private let healthStore = HKHealthStore()
     
     // Published property to notify views about changes in step count data
-    @Published var stepCountsPerHour: [(date: String, stepCount: Int)] = []
+    @Published var stepCountsPerHour: [HourlyActivity] = []
     @Published var totalNumberOfStepsDuringTheDay = 0
     let targetNumberOfSteps = 10_000
     
@@ -89,7 +89,7 @@ class TodayViewModel: ObservableObject {
             // Update the published property on the main thread
             DispatchQueue.main.async {
                 self?.stepCountsPerHour = self?.convertDateIntoString(stepCounts: stepCounts) ?? []
-                self?.totalNumberOfStepsDuringTheDay = self?.stepCountsPerHour.reduce(0) { $0 + $1.stepCount } ?? 0
+                self?.totalNumberOfStepsDuringTheDay = self?.stepCountsPerHour.reduce(0) { $0 + $1.numberOfSteps } ?? 0
             }
         }
         
@@ -97,16 +97,16 @@ class TodayViewModel: ObservableObject {
         healthStore.execute(query)
     }
     
-    private func convertDateIntoString(stepCounts: [(date: Date, stepCount: Int)] ) -> [(date: String, stepCount: Int)]{
+    private func convertDateIntoString(stepCounts: [(date: Date, stepCount: Int)] ) -> [HourlyActivity]{
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "h:mm a" // 'a' represents AM/PM format
-        var convertedSteps = [(date: String, stepCount: Int)]()
+        var convertedSteps = [HourlyActivity]()
         // Iterate through your array and format each date
         for (date, stepCount) in stepCounts {
             let formattedDate = dateFormatter.string(from: date)
             // Now `formattedDate` contains the date in the desired format (AM/PM)
             print("\(formattedDate), Steps: \(stepCount)")
-            convertedSteps.append((formattedDate, stepCount))
+            convertedSteps.append(HourlyActivity(time: formattedDate, numberOfSteps: stepCount))
         }
         return convertedSteps
     }
