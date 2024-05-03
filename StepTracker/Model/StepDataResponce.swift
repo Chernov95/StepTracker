@@ -12,10 +12,10 @@ struct StepDataResponce: Codable {
     let id: Int
     let username: String
     let stepsDate: String
-    let stepsDatetime: String // Note: You may need to replace this with an appropriate type for datetime
+    let stepsDatetime: String
     let stepsCount: Int
     let stepsTotalByDay: Int
-    let createdDatetime: String? // Optional, adjust type accordingly
+    let createdDatetime: String?
     let createdAt: String? // Optional, adjust type accordingly
     let updatedAt: String? // Optional, adjust type accordingly
     let stepsTotal: Int? // Optional, adjust type accordingly

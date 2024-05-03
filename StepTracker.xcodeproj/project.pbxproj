@@ -66,8 +66,8 @@
 		C94E29672BE31F02001FCD23 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				C94E29682BE31F15001FCD23 /* HourlyActivity.swift */,
 				C95FE7802BE59E68004F7A6B /* StepDataResponce.swift */,
+				C94E29682BE31F15001FCD23 /* HourlyActivity.swift */,
 				C94E296A2BE320C3001FCD23 /* WeeklyActivity.swift */,
 				C94E296C2BE320E1001FCD23 /* MonthlyActivity.swift */,
 			);
