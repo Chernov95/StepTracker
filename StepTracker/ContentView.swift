@@ -40,6 +40,13 @@ struct ContentView: View {
             Spacer()
         }
         .padding(.top, viewModel.constants.containerTopPadding)
+        .onChange(of: viewModel.bearerToken, perform: {newValue in 
+            print("DEBUG:: newValue is \(newValue)")
+            viewModel.postStepsData()
+        })
+        .onAppear {
+            viewModel.fetchBearerToken()
+        }
     }
 }
 
