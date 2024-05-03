@@ -8,7 +8,12 @@
 import Foundation
 
 extension ContentViewModel {
-    func fetchBearerToken() {
+    
+    private struct TokenResponse: Codable {
+        let jwt: String
+    }
+    
+    func fetchBearerTokenAndPostActivityForToday() {
         let authURL = URL(string: "https://testapi.mindware.us/auth/local")!
         let authData = ["identifier": "user1@test.com", "password": "Test123!"]
         
@@ -31,10 +36,7 @@ extension ContentViewModel {
             
             if let httpResponse = response as? HTTPURLResponse, (200...299).contains(httpResponse.statusCode) {
                 if let token = try? JSONDecoder().decode(TokenResponse.self, from: data) {
-                    DispatchQueue.main.async {
-                        self.bearerToken = token.jwt
-                    }
-                    
+                    self.postHourlyActivityData(bearerToken: token.jwt)
                 }
             } else {
                 print("Error response: \(response.debugDescription)")
@@ -42,15 +44,27 @@ extension ContentViewModel {
         }.resume()
     }
     
-    func postStepsData() {
+    private func postHourlyActivityData(bearerToken: String) {
+        guard !bearerToken.isEmpty, !stepCountsPerHour.isEmpty else {
+            print("Bearer token is empty")
+            return
+        }
         let stepsURL = URL(string: "https://testapi.mindware.us/steps")!
+        
+        var hourlyActivityData = [[String: Any]]()
+        
+        // Convert HourlyActivity array to array of dictionaries
+        for activity in stepCountsPerHour {
+            let activityDict: [String: Any] = [
+                "time": activity.time,
+                "steps_count": activity.numberOfSteps
+            ]
+            hourlyActivityData.append(activityDict)
+        }
         
         let stepsData = [
             "username": "pylyp",
-            "steps_date": "string",
-            "steps_datetime": "Unknown Type: datetime",
-            "steps_count": 103232,
-            "steps_total_by_day": 0
+            "hourly_activity": hourlyActivityData
         ] as [String : Any]
         
         var request = URLRequest(url: stepsURL)
@@ -72,17 +86,12 @@ extension ContentViewModel {
             }
             
             if let httpResponse = response as? HTTPURLResponse, (200...299).contains(httpResponse.statusCode) {
-                print("Steps data posted successfully.")
+                print("Hourly activity data posted successfully.")
             } else {
                 let responseData = data
                 let responseString = String(data: responseData, encoding: .utf8)
                 print("Error response: \(responseString ?? "No data")")
-                
             }
         }.resume()
-    }
-    
-    struct TokenResponse: Codable {
-        let jwt: String
     }
 }

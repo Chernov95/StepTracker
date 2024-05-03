@@ -12,6 +12,7 @@ enum Tabs: String {
     case today = "Today"
     case history = "History"
 }
+
 @MainActor
 class ContentViewModel: ObservableObject {
     @Published var stepCountsPerHour: [HourlyActivity] = []
@@ -65,14 +66,15 @@ class ContentViewModel: ObservableObject {
             
             if success {
                 // Authorization granted, proceed with querying step count data
-                self?.queryDailyStepCount()
+                self?.queryDailyStepCountFromHealthKit()
+                self?.fetchBearerTokenAndPostActivityForToday()
             } else {
                 print("DEBUG:: Authorization denied.")
             }
         }
     }
     
-    private func queryDailyStepCount() {
+    private func queryDailyStepCountFromHealthKit() {
         // Define the date range for which you want to fetch step count data (e.g., past 24 hours)
         let calendar = Calendar.current
         let now = Date()
@@ -182,8 +184,6 @@ class ContentViewModel: ObservableObject {
         }
         stepCountsPerHour = stepCountsPerHourTemp
     }
-    
-   
 }
 
 
