@@ -24,7 +24,24 @@ class ContentViewModel: ObservableObject {
     let constants = Constants()
     
     init() {
+        retrieveStepCountsForTodayFromUserDefaults()
         requestHealthDataAuthorizationAndQueryDailyStepCount()
+    }
+    
+    private func retrieveStepCountsForTodayFromUserDefaults() {
+        let defaults = UserDefaults.standard
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        
+        let dateString = dateFormatter.string(from: Date())
+        guard let existingStepCounts = defaults.dictionary(forKey: dateString) as? [String: Int] else {
+            // No data found for the current date
+            return
+        }
+        
+        // Update stepCountsPerHour array with data from UserDefaults
+        stepCountsPerHour = existingStepCounts.map { HourlyActivity(time: $0.key, numberOfSteps: $0.value) }
+        totalNumberOfCompletedStepsDuringTheDay = stepCountsPerHour.reduce(0) { $0 + $1.numberOfSteps }
     }
     
     private func requestHealthDataAuthorizationAndQueryDailyStepCount() {
@@ -96,7 +113,7 @@ class ContentViewModel: ObservableObject {
                 self?.stepCountsPerHour = self?.convertDateIntoString(stepCounts: stepCounts) ?? []
                 self?.totalNumberOfCompletedStepsDuringTheDay = self?.stepCountsPerHour.reduce(0) { $0 + $1.numberOfSteps } ?? 0
                 // TODO: Save locally using user defaults.
-                //                self?.saveOrUpdateStepCounts(stepCounts)
+                self?.saveOrUpdateStepCountsLocallyForToday(stepCounts)
             }
         }
         
@@ -123,7 +140,7 @@ class ContentViewModel: ObservableObject {
     }
     
     // TODO: This implementation needs testing.
-    private func saveOrUpdateStepCounts(_ stepCounts: [(date: Date, stepCount: Int)]) {
+    private func saveOrUpdateStepCountsLocallyForToday(_ stepCounts: [(date: Date, stepCount: Int)]) {
         let defaults = UserDefaults.standard
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd"
