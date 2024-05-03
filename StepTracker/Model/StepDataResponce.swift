@@ -16,9 +16,9 @@ struct StepDataResponce: Codable {
     let stepsCount: Int
     let stepsTotalByDay: Int
     let createdDatetime: String?
-    let createdAt: String? // Optional, adjust type accordingly
-    let updatedAt: String? // Optional, adjust type accordingly
-    let stepsTotal: Int? // Optional, adjust type accordingly
+    let createdAt: String?
+    let updatedAt: String?
+    let stepsTotal: Int? 
 
     enum CodingKeys: String, CodingKey {
         case id

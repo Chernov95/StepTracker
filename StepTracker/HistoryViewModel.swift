@@ -14,6 +14,7 @@ enum Periods: String {
     case monthly = "1 Month"
 }
 
+@MainActor
 class HistoryViewModel: ObservableObject {
     @Published var selectedPeriod: Periods = .weekly
     @Published var activityForTheWeek = [WeeklyActivity]()
@@ -24,6 +25,8 @@ class HistoryViewModel: ObservableObject {
     init(bearerToken: String) {
         self.bearerToken = bearerToken
         fetchStepData()
+        generateMockWeeklyStepCount()
+        generateMockMonthlyStepCount()
     }
     
     
@@ -48,7 +51,7 @@ class HistoryViewModel: ObservableObject {
                    if let decodedResponse = try? JSONDecoder().decode([StepDataResponce].self, from: data) {
                        DispatchQueue.main.async {
                            // Handle decoded response as needed
-                           print(decodedResponse)
+                           print("decoded responce\(decodedResponse)")
                        }
                    } else {
                        let responseString = String(data: data, encoding: .utf8)
@@ -60,8 +63,9 @@ class HistoryViewModel: ObservableObject {
                }
            }.resume()
        }
-    
+   
     //MARK: For testing purposes on simulator
+    
     func generateMockWeeklyStepCount() {
         let dayNames = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
         var activityForTheWeekTemp = [WeeklyActivity]()
@@ -73,6 +77,7 @@ class HistoryViewModel: ObservableObject {
     }
     
     //MARK: For testing purposes on simulator
+
     func generateMockMonthlyStepCount() {
         var activityForTheMonthTemp = [MonthlyActivity]()
         
