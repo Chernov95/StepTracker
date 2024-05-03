@@ -20,127 +20,47 @@ class HistoryViewModel: ObservableObject {
     @Published var activityForTheMonth = [MonthlyActivity]()
     private let healthStore = HKHealthStore()
     let constants = Constants()
-    
-    func queryWeeklyStepCount() {
-        var calendar = Calendar.current
-        calendar.firstWeekday = 2 // Set Monday as the first day of the week
-        
-        let now = Date()
-        
-        // Get the start and end dates of the current week
-        guard let weekInterval = calendar.dateInterval(of: .weekOfYear, for: now) else {
-            print("Failed to calculate the current week.")
-            return
-        }
-        
-        let startOfWeek = weekInterval.start
-        let endOfWeek = weekInterval.end
-        
-        // Define the daily interval
-        var dateComponents = DateComponents()
-        dateComponents.day = 1
-        let stepCountType = HKObjectType.quantityType(forIdentifier: .stepCount)!
-        
-        // Create the query
-        let query = HKStatisticsCollectionQuery(quantityType: stepCountType,
-                                                quantitySamplePredicate: nil,
-                                                options: .cumulativeSum,
-                                                anchorDate: startOfWeek,
-                                                intervalComponents: dateComponents)
-        
-        // Define array to hold weekly activities
-        var activityForTheWeek = [WeeklyActivity]()
-        
-        // Define how the results should be grouped
-        query.initialResultsHandler = { [weak self] query, results, error in
-            guard let statsCollection = results else {
-                print("Failed to fetch step count data: \(error?.localizedDescription ?? "Unknown error")")
-                return
-            }
-            
-            statsCollection.enumerateStatistics(from: startOfWeek, to: endOfWeek) { statistics, _ in
-                guard let sum = statistics.sumQuantity()else { return }
-                let date = statistics.startDate
-                // Skip statistics for future dates
-                guard date <= now else { return }
-                
-                let dayName = calendar.shortWeekdaySymbols[calendar.component(.weekday, from: date) - 1]
-                let stepCount = Int(sum.doubleValue(for: HKUnit.count()))
-                
-                let weeklyActivity = WeeklyActivity(dayName: dayName, numberOfSteps: stepCount)
-                activityForTheWeek.append(weeklyActivity)
-            }
-            
-            // Update the published property on the main thread
-            DispatchQueue.main.async {
-                self?.activityForTheWeek = activityForTheWeek
-            }
-        }
-        
-        // Execute the query
-        healthStore.execute(query)
+    let bearerToken: String
+    init(bearerToken: String) {
+        self.bearerToken = bearerToken
+        fetchStepData()
     }
     
-    func queryMonthlyStepCount() {
-        let calendar = Calendar.current
-        let now = Date()
-        
-        // Find the beginning of the current month
-        guard let startOfMonth = calendar.date(from: calendar.dateComponents([.year, .month], from: now)) else {
-            print("Failed to calculate the beginning of the month.")
-            return
-        }
-        
-        // Find the end of the current month
-        guard let endOfMonth = calendar.date(byAdding: DateComponents(month: 1, day: -1), to: startOfMonth) else {
-            print("Failed to calculate the end of the month.")
-            return
-        }
-        
-        // Define the daily interval
-        var dateComponents = DateComponents()
-        dateComponents.day = 1
-        let stepCountType = HKObjectType.quantityType(forIdentifier: .stepCount)!
-        
-        // Create the query
-        let query = HKStatisticsCollectionQuery(quantityType: stepCountType,
-                                                quantitySamplePredicate: nil,
-                                                options: .cumulativeSum,
-                                                anchorDate: startOfMonth,
-                                                intervalComponents: dateComponents)
-        
-        // Define array to hold monthly activities
-        var activityForTheMonth = [MonthlyActivity]()
-        
-        // Define how the results should be grouped
-        query.initialResultsHandler = { [weak self] query, results, error in
-            guard let statsCollection = results else {
-                print("Failed to fetch step count data: \(error?.localizedDescription ?? "Unknown error")")
-                return
-            }
-            
-            statsCollection.enumerateStatistics(from: startOfMonth, to: endOfMonth) { statistics, _ in
-                guard let sum = statistics.sumQuantity() else { return }
-                let date = statistics.startDate
-                // Skip statistics for future dates
-                guard date <= now else { return }
-                
-                let day = calendar.component(.day, from: date)
-                let stepCount = Int(sum.doubleValue(for: HKUnit.count()))
-                
-                let monthlyActivity = MonthlyActivity(date: day, numberOfSteps: stepCount)
-                activityForTheMonth.append(monthlyActivity)
-            }
-            
-            // Update the published property on the main thread
-            DispatchQueue.main.async {
-                self?.activityForTheMonth = activityForTheMonth
-            }
-        }
-        
-        // Execute the query
-        healthStore.execute(query)
-    }
+    
+    func fetchStepData() {
+        guard !bearerToken.isEmpty else {
+               print("Bearer token is empty")
+               return
+           }
+           let stepsURL = URL(string: "https://testapi.mindware.us/steps")!
+           var request = URLRequest(url: stepsURL)
+           request.httpMethod = "GET"
+           request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+           request.setValue("Bearer \(bearerToken)", forHTTPHeaderField: "Authorization")
+           
+           URLSession.shared.dataTask(with: request) { data, response, error in
+               guard let data = data else {
+                   print("No data returned: \(error?.localizedDescription ?? "Unknown error")")
+                   return
+               }
+               
+               if let httpResponse = response as? HTTPURLResponse, (200...299).contains(httpResponse.statusCode) {
+                   if let decodedResponse = try? JSONDecoder().decode([StepDataResponce].self, from: data) {
+                       DispatchQueue.main.async {
+                           // Handle decoded response as needed
+                           print(decodedResponse)
+                       }
+                   } else {
+                       let responseString = String(data: data, encoding: .utf8)
+                       print("Error decoding response: \(responseString ?? "No data")")
+                   }
+               } else {
+                   let responseString = String(data: data, encoding: .utf8)
+                   print("Error response: \(responseString ?? "No data")")
+               }
+           }.resume()
+       }
+    
     //MARK: For testing purposes on simulator
     func generateMockWeeklyStepCount() {
         let dayNames = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]

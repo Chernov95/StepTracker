@@ -37,6 +37,7 @@ extension ContentViewModel {
             if let httpResponse = response as? HTTPURLResponse, (200...299).contains(httpResponse.statusCode) {
                 if let token = try? JSONDecoder().decode(TokenResponse.self, from: data) {
                     self.postHourlyActivityData(bearerToken: token.jwt)
+                    self.bearerToken = token.jwt
                 }
             } else {
                 print("Error response: \(response.debugDescription)")

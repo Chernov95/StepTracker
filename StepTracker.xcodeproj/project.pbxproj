@@ -17,6 +17,7 @@
 		C94E296B2BE320C3001FCD23 /* WeeklyActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = C94E296A2BE320C3001FCD23 /* WeeklyActivity.swift */; };
 		C94E296D2BE320E1001FCD23 /* MonthlyActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = C94E296C2BE320E1001FCD23 /* MonthlyActivity.swift */; };
 		C95FE77F2BE56179004F7A6B /* ContentViewModel+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = C95FE77E2BE56179004F7A6B /* ContentViewModel+Ext.swift */; };
+		C95FE7812BE59E68004F7A6B /* StepDataResponce.swift in Sources */ = {isa = PBXBuildFile; fileRef = C95FE7802BE59E68004F7A6B /* StepDataResponce.swift */; };
 		C99FBEB12BE1A13000C15009 /* StepTrackerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C99FBEB02BE1A13000C15009 /* StepTrackerApp.swift */; };
 		C99FBEB32BE1A13000C15009 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C99FBEB22BE1A13000C15009 /* ContentView.swift */; };
 		C99FBEB52BE1A13200C15009 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C99FBEB42BE1A13200C15009 /* Assets.xcassets */; };
@@ -35,6 +36,7 @@
 		C94E296A2BE320C3001FCD23 /* WeeklyActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeeklyActivity.swift; sourceTree = "<group>"; };
 		C94E296C2BE320E1001FCD23 /* MonthlyActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonthlyActivity.swift; sourceTree = "<group>"; };
 		C95FE77E2BE56179004F7A6B /* ContentViewModel+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ContentViewModel+Ext.swift"; sourceTree = "<group>"; };
+		C95FE7802BE59E68004F7A6B /* StepDataResponce.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StepDataResponce.swift; sourceTree = "<group>"; };
 		C99FBEAD2BE1A13000C15009 /* StepTracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = StepTracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C99FBEB02BE1A13000C15009 /* StepTrackerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StepTrackerApp.swift; sourceTree = "<group>"; };
 		C99FBEB22BE1A13000C15009 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -65,6 +67,7 @@
 			isa = PBXGroup;
 			children = (
 				C94E29682BE31F15001FCD23 /* HourlyActivity.swift */,
+				C95FE7802BE59E68004F7A6B /* StepDataResponce.swift */,
 				C94E296A2BE320C3001FCD23 /* WeeklyActivity.swift */,
 				C94E296C2BE320E1001FCD23 /* MonthlyActivity.swift */,
 			);
@@ -188,6 +191,7 @@
 				C99FBEB32BE1A13000C15009 /* ContentView.swift in Sources */,
 				C94E296B2BE320C3001FCD23 /* WeeklyActivity.swift in Sources */,
 				C94E29642BE31ABC001FCD23 /* HistoryView.swift in Sources */,
+				C95FE7812BE59E68004F7A6B /* StepDataResponce.swift in Sources */,
 				C94E295C2BE1A86E001FCD23 /* TodayView.swift in Sources */,
 				C95FE77F2BE56179004F7A6B /* ContentViewModel+Ext.swift in Sources */,
 				C94E296D2BE320E1001FCD23 /* MonthlyActivity.swift in Sources */,

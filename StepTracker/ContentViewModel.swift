@@ -18,7 +18,8 @@ class ContentViewModel: ObservableObject {
     @Published var stepCountsPerHour: [HourlyActivity] = []
     @Published var totalNumberOfCompletedStepsDuringTheDay = 0
     @Published var selectedTab: Tabs = .today
-    @Published var bearerToken: String = ""
+    
+    var bearerToken: String = ""
     
     private let healthStore = HKHealthStore()
     let targetedNumberOfSteps = 10_000

@@ -35,7 +35,7 @@ struct ContentView: View {
                     ProgressView()
                 }
             } else {
-                HistoryView()
+                HistoryView(bearerToken: viewModel.bearerToken)
             }
             Spacer()
         }

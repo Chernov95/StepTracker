@@ -9,7 +9,10 @@ import SwiftUI
 import Charts
 
 struct HistoryView: View {
-    @ObservedObject private var viewModel = HistoryViewModel()
+    @ObservedObject private var viewModel: HistoryViewModel
+    init(bearerToken: String) {
+        _viewModel = ObservedObject(wrappedValue: HistoryViewModel(bearerToken: bearerToken))
+    }
     
     var body: some View {
         VStack {
@@ -31,7 +34,7 @@ struct HistoryView: View {
     private func displayBarChart(for selectedPeriod: Periods) -> some View {
         if selectedPeriod == .weekly {
             if viewModel.activityForTheWeek.isEmpty {
-                viewModel.queryWeeklyStepCount()
+//                viewModel.queryWeeklyStepCount()
                 //                viewModel.generateMockWeeklyStepCount()
                 return AnyView(ProgressView())
             } else {
@@ -53,7 +56,7 @@ struct HistoryView: View {
             }
         } else {
             if viewModel.activityForTheMonth.isEmpty {
-                viewModel.queryMonthlyStepCount()
+//                viewModel.queryMonthlyStepCount()
                 //                viewModel.generateMockMonthlyStepCount()
                 return AnyView(ProgressView())
             } else {
@@ -76,6 +79,6 @@ struct HistoryView: View {
     }
 }
 
-#Preview {
-    HistoryView()
-}
+//#Preview {
+//    HistoryView()
+//}
