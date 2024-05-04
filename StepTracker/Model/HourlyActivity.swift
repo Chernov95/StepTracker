@@ -7,7 +7,8 @@
 
 import Foundation
 
-struct HourlyActivity {
+struct HourlyActivity: Identifiable {
+    let id = UUID()
     let time: String
     let numberOfSteps: Int
 }

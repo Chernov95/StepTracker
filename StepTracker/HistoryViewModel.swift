@@ -40,7 +40,7 @@ class HistoryViewModel: ObservableObject {
            request.httpMethod = "GET"
            request.setValue("application/json", forHTTPHeaderField: "Content-Type")
            request.setValue("Bearer \(bearerToken)", forHTTPHeaderField: "Authorization")
-           
+           print("Bearer token is \(bearerToken)")
            URLSession.shared.dataTask(with: request) { data, response, error in
                guard let data = data else {
                    print("No data returned: \(error?.localizedDescription ?? "Unknown error")")

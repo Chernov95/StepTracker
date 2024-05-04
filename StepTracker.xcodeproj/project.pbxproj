@@ -18,6 +18,8 @@
 		C94E296D2BE320E1001FCD23 /* MonthlyActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = C94E296C2BE320E1001FCD23 /* MonthlyActivity.swift */; };
 		C95FE77F2BE56179004F7A6B /* ContentViewModel+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = C95FE77E2BE56179004F7A6B /* ContentViewModel+Ext.swift */; };
 		C95FE7812BE59E68004F7A6B /* StepDataResponce.swift in Sources */ = {isa = PBXBuildFile; fileRef = C95FE7802BE59E68004F7A6B /* StepDataResponce.swift */; };
+		C95FE7832BE6B6A8004F7A6B /* TokenResponce.swift in Sources */ = {isa = PBXBuildFile; fileRef = C95FE7822BE6B6A8004F7A6B /* TokenResponce.swift */; };
+		C95FE7852BE6BACE004F7A6B /* StepDataRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = C95FE7842BE6BACE004F7A6B /* StepDataRequest.swift */; };
 		C99FBEB12BE1A13000C15009 /* StepTrackerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C99FBEB02BE1A13000C15009 /* StepTrackerApp.swift */; };
 		C99FBEB32BE1A13000C15009 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C99FBEB22BE1A13000C15009 /* ContentView.swift */; };
 		C99FBEB52BE1A13200C15009 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C99FBEB42BE1A13200C15009 /* Assets.xcassets */; };
@@ -37,6 +39,8 @@
 		C94E296C2BE320E1001FCD23 /* MonthlyActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonthlyActivity.swift; sourceTree = "<group>"; };
 		C95FE77E2BE56179004F7A6B /* ContentViewModel+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ContentViewModel+Ext.swift"; sourceTree = "<group>"; };
 		C95FE7802BE59E68004F7A6B /* StepDataResponce.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StepDataResponce.swift; sourceTree = "<group>"; };
+		C95FE7822BE6B6A8004F7A6B /* TokenResponce.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenResponce.swift; sourceTree = "<group>"; };
+		C95FE7842BE6BACE004F7A6B /* StepDataRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StepDataRequest.swift; sourceTree = "<group>"; };
 		C99FBEAD2BE1A13000C15009 /* StepTracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = StepTracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C99FBEB02BE1A13000C15009 /* StepTrackerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StepTrackerApp.swift; sourceTree = "<group>"; };
 		C99FBEB22BE1A13000C15009 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -67,6 +71,8 @@
 			isa = PBXGroup;
 			children = (
 				C95FE7802BE59E68004F7A6B /* StepDataResponce.swift */,
+				C95FE7842BE6BACE004F7A6B /* StepDataRequest.swift */,
+				C95FE7822BE6B6A8004F7A6B /* TokenResponce.swift */,
 				C94E29682BE31F15001FCD23 /* HourlyActivity.swift */,
 				C94E296A2BE320C3001FCD23 /* WeeklyActivity.swift */,
 				C94E296C2BE320E1001FCD23 /* MonthlyActivity.swift */,
@@ -198,7 +204,9 @@
 				C94E29612BE1C5D9001FCD23 /* TodayViewModel.swift in Sources */,
 				C94E295F2BE1AC6D001FCD23 /* ProgressBar.swift in Sources */,
 				C9485C462BE4319100257161 /* ContentViewModel.swift in Sources */,
+				C95FE7832BE6B6A8004F7A6B /* TokenResponce.swift in Sources */,
 				C99FBEB12BE1A13000C15009 /* StepTrackerApp.swift in Sources */,
+				C95FE7852BE6BACE004F7A6B /* StepDataRequest.swift in Sources */,
 				C94E29662BE31AD1001FCD23 /* HistoryViewModel.swift in Sources */,
 				C94E29692BE31F15001FCD23 /* HourlyActivity.swift in Sources */,
 			);

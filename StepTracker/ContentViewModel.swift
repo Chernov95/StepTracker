@@ -57,7 +57,6 @@ class ContentViewModel: ObservableObject {
             print("DEBUG:: Step count type is not available.")
             return
         }
-        
         // Request authorization to access step count data
         healthStore.requestAuthorization(toShare: nil, read: [stepCountType]) { [weak self] (success, error) in
             if let error = error {
@@ -68,7 +67,12 @@ class ContentViewModel: ObservableObject {
             if success {
                 // Authorization granted, proceed with querying step count data
                 self?.queryDailyStepCountFromHealthKit()
-                self?.fetchBearerTokenAndPostActivityForToday()
+                Task {
+                    await self?.fetchBearerToken()
+                    if let bearerToken = self?.bearerToken {
+                        await self?.postHourlyActivityData(bearerToken: bearerToken)
+                    }
+                }
             } else {
                 print("DEBUG:: Authorization denied.")
             }

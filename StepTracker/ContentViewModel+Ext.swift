@@ -8,12 +8,7 @@
 import Foundation
 
 extension ContentViewModel {
-    
-    private struct TokenResponse: Codable {
-        let jwt: String
-    }
-    
-    func fetchBearerTokenAndPostActivityForToday() {
+    func fetchBearerToken() async {
         let authURL = URL(string: "https://testapi.mindware.us/auth/local")!
         let authData = ["identifier": "user1@test.com", "password": "Test123!"]
         
@@ -28,24 +23,24 @@ extension ContentViewModel {
             return
         }
         
-        URLSession.shared.dataTask(with: request) { data, response, error in
-            guard let data = data else {
-                print("No data returned: \(error?.localizedDescription ?? "Unknown error")")
+        do {
+            let (data, response) = try await URLSession.shared.data(for: request)
+            
+            guard let httpResponse = response as? HTTPURLResponse, (200...299).contains(httpResponse.statusCode) else {
+                print("Error response: \(response.debugDescription)")
                 return
             }
-            
-            if let httpResponse = response as? HTTPURLResponse, (200...299).contains(httpResponse.statusCode) {
-                if let token = try? JSONDecoder().decode(TokenResponse.self, from: data) {
-                    self.postHourlyActivityData(bearerToken: token.jwt)
-                    self.bearerToken = token.jwt
-                }
+            if let token = try? JSONDecoder().decode(TokenResponse.self, from: data) {
+                self.bearerToken = token.jwt
             } else {
-                print("Error response: \(response.debugDescription)")
+                print("Failed to decode token")
             }
-        }.resume()
+        } catch {
+            print("Error fetching bearer token: \(error.localizedDescription)")
+        }
     }
     
-    private func postHourlyActivityData(bearerToken: String) {
+    func postHourlyActivityData(bearerToken: String) async {
         guard !bearerToken.isEmpty, !stepCountsPerHour.isEmpty else {
             print("Bearer token is empty")
             return
@@ -75,24 +70,17 @@ extension ContentViewModel {
         
         do {
             request.httpBody = try JSONSerialization.data(withJSONObject: stepsData)
-        } catch {
-            print("Error encoding steps data: \(error.localizedDescription)")
-            return
-        }
-        
-        URLSession.shared.dataTask(with: request) { data, response, error in
-            guard let data = data else {
-                print("No data returned: \(error?.localizedDescription ?? "Unknown error")")
+            
+            let (data, response) = try await URLSession.shared.data(for: request)
+            
+            guard let httpResponse = response as? HTTPURLResponse, (200...299).contains(httpResponse.statusCode) else {
+                let responseString = String(data: data, encoding: .utf8)
+                print("Error response: \(responseString ?? "No data")")
                 return
             }
-            
-            if let httpResponse = response as? HTTPURLResponse, (200...299).contains(httpResponse.statusCode) {
-                print("Hourly activity data posted successfully.")
-            } else {
-                let responseData = data
-                let responseString = String(data: responseData, encoding: .utf8)
-                print("Error response: \(responseString ?? "No data")")
-            }
-        }.resume()
+            print("Hourly activity data posted successfully.")
+        } catch {
+            print("Error posting hourly activity data: \(error.localizedDescription)")
+        }
     }
 }
