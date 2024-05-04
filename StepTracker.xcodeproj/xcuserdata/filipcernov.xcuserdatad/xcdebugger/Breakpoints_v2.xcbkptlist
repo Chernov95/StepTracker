@@ -20,5 +20,65 @@
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "19D096E4-4969-41C1-8831-C8258307C241"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "StepTracker/HistoryViewModel.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "28"
+            endingLineNumber = "28"
+            landmarkName = "init(bearerToken:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "19D096E4-4969-41C1-8831-C8258307C241 - 10997087b130f5f8"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 @Sendable () async -&gt; () in StepTracker.HistoryViewModel.init(bearerToken: Swift.String) -&gt; StepTracker.HistoryViewModel"
+                  moduleName = "StepTracker"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/filipcernov/Desktop/StepTracker/StepTracker/HistoryViewModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "28"
+                  endingLineNumber = "28">
+               </Location>
+               <Location
+                  uuid = "19D096E4-4969-41C1-8831-C8258307C241 - 19415f83c53f860b"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(1) await resume partial function for closure #1 @Sendable () async -&gt; () in StepTracker.HistoryViewModel.init(bearerToken: Swift.String) -&gt; StepTracker.HistoryViewModel"
+                  moduleName = "StepTracker"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/filipcernov/Desktop/StepTracker/StepTracker/HistoryViewModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "28"
+                  endingLineNumber = "28">
+               </Location>
+               <Location
+                  uuid = "19D096E4-4969-41C1-8831-C8258307C241 - c207fa17940f4acb"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(2) suspend resume partial function for closure #1 @Sendable () async -&gt; () in StepTracker.HistoryViewModel.init(bearerToken: Swift.String) -&gt; StepTracker.HistoryViewModel"
+                  moduleName = "StepTracker"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/filipcernov/Desktop/StepTracker/StepTracker/HistoryViewModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "28"
+                  endingLineNumber = "28">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
    </Breakpoints>
 </Bucket>
