@@ -47,6 +47,11 @@ struct ContentView: View {
             Spacer()
         }
         .padding(.top, viewModel.constants.containerTopPadding)
+        .onAppear {
+            Task {
+                await viewModel.requestHealthDataAuthorizationAndQueryDailyStepCount()
+            }
+        }
     }
 }
 

@@ -28,7 +28,6 @@ class ContentViewModel: ObservableObject {
     
     init() {
         retrieveStepCountsForTodayFromUserDefaults()
-        requestHealthDataAuthorizationAndQueryDailyStepCount()
     }
     
     private func retrieveStepCountsForTodayFromUserDefaults() {
@@ -54,7 +53,7 @@ class ContentViewModel: ObservableObject {
         totalNumberOfCompletedStepsDuringTheDay = stepCountsPerHour.reduce(0) { $0 + $1.numberOfSteps }
     }
     
-    private func requestHealthDataAuthorizationAndQueryDailyStepCount() {
+    func requestHealthDataAuthorizationAndQueryDailyStepCount() async {
         guard HKHealthStore.isHealthDataAvailable() else {
             print("DEBUG:: HealthKit is not available on this device.")
             return
@@ -66,24 +65,18 @@ class ContentViewModel: ObservableObject {
             return
         }
         // Request authorization to access step count data
-        healthStore.requestAuthorization(toShare: nil, read: [stepCountType]) { [weak self] (success, error) in
-            if let error = error {
-                print("DEBUG:: Authorization request error: \(error.localizedDescription)")
-                return
+        do {
+            try await healthStore.__requestAuthorization(toShare: nil, read: [stepCountType])
+            // Authorization granted, proceed with querying step count data
+            queryDailyStepCountFromHealthKit()
+            Task {
+                await fetchBearerToken()
+                await postHourlyActivityData(bearerToken: bearerToken)
+               
             }
-            
-            if success {
-                // Authorization granted, proceed with querying step count data
-                self?.queryDailyStepCountFromHealthKit()
-                Task {
-                    await self?.fetchBearerToken()
-                    if let bearerToken = self?.bearerToken {
-                        await self?.postHourlyActivityData(bearerToken: bearerToken)
-                    }
-                }
-            } else {
-                print("DEBUG:: Authorization denied.")
-            }
+        } catch let error {
+            print("DEBUG:: Authorization request error: \(error.localizedDescription)")
+            print("DEBUG:: Authorization denied.")
         }
     }
     
