@@ -50,6 +50,7 @@ struct ContentView: View {
         .onAppear {
             Task {
                 await viewModel.requestHealthDataAuthorizationAndQueryDailyStepCount()
+                await viewModel.postHourlyActivityForToday()
             }
         }
     }

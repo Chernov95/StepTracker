@@ -8,7 +8,12 @@
 import Foundation
 
 extension ContentViewModel {
-    func fetchBearerToken() async {
+    func postHourlyActivityForToday() async {
+        await fetchBearerToken()
+        await postHourlyActivityData(bearerToken: bearerToken)
+    }
+    
+    private func fetchBearerToken() async {
         let authURL = URL(string: "https://testapi.mindware.us/auth/local")!
         let authData = ["identifier": "user1@test.com", "password": "Test123!"]
         
@@ -40,7 +45,7 @@ extension ContentViewModel {
         }
     }
     
-    func postHourlyActivityData(bearerToken: String) async {
+    private func postHourlyActivityData(bearerToken: String) async {
         guard !bearerToken.isEmpty, !stepCountsPerHour.isEmpty else {
             print("Bearer token is empty")
             return
@@ -87,14 +92,14 @@ extension ContentViewModel {
         }
     }
     
-    func getTodaysShortVersionDate() -> String {
+    private func getTodaysShortVersionDate() -> String {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd"
         let dateString = dateFormatter.string(from: Date())
         return dateString
     }
     
-    func getTodaysLongVersionDate() -> String {
+    private func getTodaysLongVersionDate() -> String {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
         let dateString = dateFormatter.string(from: Date())

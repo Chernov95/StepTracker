@@ -27,10 +27,31 @@ class ContentViewModel: ObservableObject {
     let constants = Constants()
     
     init() {
-        retrieveStepCountsForTodayFromUserDefaults()
+        retrieveStepCountsForTodayFromLocalStorage()
     }
     
-    private func retrieveStepCountsForTodayFromUserDefaults() {
+    func requestHealthDataAuthorizationAndQueryDailyStepCount() async {
+        guard HKHealthStore.isHealthDataAvailable() else {
+            print("DEBUG:: HealthKit is not available on this device.")
+            return
+        }
+        
+        // Define the health data type we want to read (step count)
+        guard let stepCountType = HKObjectType.quantityType(forIdentifier: .stepCount) else {
+            print("DEBUG:: Step count type is not available.")
+            return
+        }
+        // Request authorization to access step count data
+        do {
+            try await healthStore.__requestAuthorization(toShare: nil, read: [stepCountType])
+            // Authorization granted, proceed with querying step count data
+            queryAndDisplayFreshDailyStepCountFromHealthKit()
+        } catch let error {
+            print("DEBUG:: Authorization request error: \(error.localizedDescription)")
+        }
+    }
+    
+    private func retrieveStepCountsForTodayFromLocalStorage() {
         let defaults = UserDefaults.standard
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd"
@@ -52,35 +73,8 @@ class ContentViewModel: ObservableObject {
         }
         totalNumberOfCompletedStepsDuringTheDay = stepCountsPerHour.reduce(0) { $0 + $1.numberOfSteps }
     }
-    
-    func requestHealthDataAuthorizationAndQueryDailyStepCount() async {
-        guard HKHealthStore.isHealthDataAvailable() else {
-            print("DEBUG:: HealthKit is not available on this device.")
-            return
-        }
-        
-        // Define the health data type we want to read (step count)
-        guard let stepCountType = HKObjectType.quantityType(forIdentifier: .stepCount) else {
-            print("DEBUG:: Step count type is not available.")
-            return
-        }
-        // Request authorization to access step count data
-        do {
-            try await healthStore.__requestAuthorization(toShare: nil, read: [stepCountType])
-            // Authorization granted, proceed with querying step count data
-            queryDailyStepCountFromHealthKit()
-            Task {
-                await fetchBearerToken()
-                await postHourlyActivityData(bearerToken: bearerToken)
-               
-            }
-        } catch let error {
-            print("DEBUG:: Authorization request error: \(error.localizedDescription)")
-            print("DEBUG:: Authorization denied.")
-        }
-    }
-    
-    private func queryDailyStepCountFromHealthKit() {
+
+    private func queryAndDisplayFreshDailyStepCountFromHealthKit() {
         // Define the date range for which you want to fetch step count data (e.g., past 24 hours)
         DispatchQueue.main.async {
             if !self.stepCountsPerHour.isEmpty {
@@ -122,10 +116,10 @@ class ContentViewModel: ObservableObject {
             }
             
             DispatchQueue.main.async {
-                self?.stepCountsPerHour = self?.convertDateIntoString(stepCounts: stepCounts) ?? []
+                self?.stepCountsPerHour = self?.getConvertedHourlyActivityModel(stepCounts: stepCounts) ?? []
                 self?.totalNumberOfCompletedStepsDuringTheDay = self?.stepCountsPerHour.reduce(0) { $0 + $1.numberOfSteps } ?? 0
                 // TODO: Save locally using user defaults.
-                self?.saveOrUpdateStepCountsLocallyForToday(stepCounts)
+                self?.saveOrUpdateStepCountsForTodayInLocalStorage(stepCounts)
                 self?.dataForTodayAreBeingRefreshed = false
             }
         }
@@ -134,7 +128,7 @@ class ContentViewModel: ObservableObject {
         healthStore.execute(query)
     }
     
-    private func convertDateIntoString(stepCounts: [(date: Date, stepCount: Int)] ) -> [HourlyActivity]{
+    private func getConvertedHourlyActivityModel(stepCounts: [(date: Date, stepCount: Int)] ) -> [HourlyActivity] {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "h:mm a" // 'a' represents AM/PM format
         var convertedSteps = [HourlyActivity]()
@@ -142,7 +136,6 @@ class ContentViewModel: ObservableObject {
         for (date, stepCount) in stepCounts {
             let formattedDate = dateFormatter.string(from: date)
             // Now `formattedDate` contains the date in the desired format (AM/PM)
-//            print("\(formattedDate), Steps: \(stepCount)")
             convertedSteps.append(HourlyActivity(time: formattedDate, numberOfSteps: stepCount))
         }
         return convertedSteps
@@ -153,7 +146,7 @@ class ContentViewModel: ObservableObject {
     }
     
     // TODO: This implementation needs testing.
-    private func saveOrUpdateStepCountsLocallyForToday(_ stepCounts: [(date: Date, stepCount: Int)]) {
+    private func saveOrUpdateStepCountsForTodayInLocalStorage(_ stepCounts: [(date: Date, stepCount: Int)]) {
         let defaults = UserDefaults.standard
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd"
