@@ -19,6 +19,7 @@ class ContentViewModel: ObservableObject {
     @Published var totalNumberOfCompletedStepsDuringTheDay = 0
     @Published var selectedTab: Tabs = .today
     @Published var dataForTodayAreBeingRefreshed = false
+    @Published var newStepsDataForTodayHasBeenFetchedFromHealthKit = false
     
     var bearerToken: String = ""
     
@@ -74,7 +75,7 @@ class ContentViewModel: ObservableObject {
         totalNumberOfCompletedStepsDuringTheDay = stepCountsPerHour.reduce(0) { $0 + $1.numberOfSteps }
     }
 
-    private func queryAndDisplayFreshDailyStepCountFromHealthKit() {
+    func queryAndDisplayFreshDailyStepCountFromHealthKit() {
         // Define the date range for which you want to fetch step count data (e.g., past 24 hours)
         DispatchQueue.main.async {
             if !self.stepCountsPerHour.isEmpty {
@@ -118,9 +119,9 @@ class ContentViewModel: ObservableObject {
             DispatchQueue.main.async {
                 self?.stepCountsPerHour = self?.getConvertedHourlyActivityModel(stepCounts: stepCounts) ?? []
                 self?.totalNumberOfCompletedStepsDuringTheDay = self?.stepCountsPerHour.reduce(0) { $0 + $1.numberOfSteps } ?? 0
-                // TODO: Save locally using user defaults.
                 self?.saveOrUpdateStepCountsForTodayInLocalStorage(stepCounts)
                 self?.dataForTodayAreBeingRefreshed = false
+                self?.newStepsDataForTodayHasBeenFetchedFromHealthKit = true
             }
         }
         
@@ -145,7 +146,6 @@ class ContentViewModel: ObservableObject {
         (totalNumberOfCompletedStepsDuringTheDay  * 100) / targetedNumberOfSteps
     }
     
-    // TODO: This implementation needs testing.
     private func saveOrUpdateStepCountsForTodayInLocalStorage(_ stepCounts: [(date: Date, stepCount: Int)]) {
         let defaults = UserDefaults.standard
         let dateFormatter = DateFormatter()
