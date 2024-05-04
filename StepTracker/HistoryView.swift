@@ -29,6 +29,11 @@ struct HistoryView: View {
             displayBarChart(for: viewModel.selectedPeriod)
             Spacer()
         }
+        .onAppear {
+            Task {
+                await viewModel.fetchStepData()
+            }
+        }
     }
     
     private func displayBarChart(for selectedPeriod: Periods) -> some View {

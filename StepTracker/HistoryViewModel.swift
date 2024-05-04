@@ -24,9 +24,6 @@ class HistoryViewModel: ObservableObject {
     let bearerToken: String
     init(bearerToken: String) {
         self.bearerToken = bearerToken
-        Task {
-            await fetchStepData()
-        }
         generateMockWeeklyStepCount()
         generateMockMonthlyStepCount()
     }
@@ -43,8 +40,6 @@ class HistoryViewModel: ObservableObject {
         request.httpMethod = "GET"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.setValue("Bearer \(bearerToken)", forHTTPHeaderField: "Authorization")
-        print("Bearer token is \(bearerToken)")
-        
         do {
             let (data, response) = try await URLSession.shared.data(for: request)
             

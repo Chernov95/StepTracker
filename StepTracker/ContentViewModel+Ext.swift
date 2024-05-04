@@ -59,8 +59,11 @@ extension ContentViewModel {
         }
         
         let stepsData = [
-            "username": "pylyp",
-            "hourly_activity": hourlyActivityData
+            "username": "qtrang",
+            "steps_date": getTodaysShortVersionDate(),
+            "steps_datetime": getTodaysLongVersionDate(),
+            "steps_count": 0,
+            "steps_total_by_day": 0
         ] as [String : Any]
         
         var request = URLRequest(url: stepsURL)
@@ -82,5 +85,19 @@ extension ContentViewModel {
         } catch {
             print("Error posting hourly activity data: \(error.localizedDescription)")
         }
+    }
+    
+    func getTodaysShortVersionDate() -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        let dateString = dateFormatter.string(from: Date())
+        return dateString
+    }
+    
+    func getTodaysLongVersionDate() -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
+        let dateString = dateFormatter.string(from: Date())
+        return dateString
     }
 }
