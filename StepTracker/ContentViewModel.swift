@@ -18,6 +18,7 @@ class ContentViewModel: ObservableObject {
     @Published var stepCountsPerHour: [HourlyActivity] = []
     @Published var totalNumberOfCompletedStepsDuringTheDay = 0
     @Published var selectedTab: Tabs = .today
+    @Published var dataForTodayAreBeingRefreshed = false
     
     var bearerToken: String = ""
     
@@ -42,7 +43,14 @@ class ContentViewModel: ObservableObject {
         }
         
         // Update stepCountsPerHour array with data from UserDefaults
-        stepCountsPerHour = existingStepCounts.map { HourlyActivity(time: $0.key, numberOfSteps: $0.value) }
+        stepCountsPerHour = existingStepCounts.map { HourlyActivity(time: $0.key, numberOfSteps: $0.value) } .sorted {
+            let formatter = DateFormatter()
+            formatter.dateFormat = "h:mm a"
+            if let time1 = formatter.date(from: $0.time), let time2 = formatter.date(from: $1.time) {
+                return time1 < time2
+            }
+            return false // If conversion fails, maintain original order
+        }
         totalNumberOfCompletedStepsDuringTheDay = stepCountsPerHour.reduce(0) { $0 + $1.numberOfSteps }
     }
     
@@ -81,6 +89,11 @@ class ContentViewModel: ObservableObject {
     
     private func queryDailyStepCountFromHealthKit() {
         // Define the date range for which you want to fetch step count data (e.g., past 24 hours)
+        DispatchQueue.main.async {
+            if !self.stepCountsPerHour.isEmpty {
+                self.dataForTodayAreBeingRefreshed = true
+            }
+        }
         let calendar = Calendar.current
         let now = Date()
         let startDate = calendar.startOfDay(for: now)
@@ -115,12 +128,12 @@ class ContentViewModel: ObservableObject {
                 }
             }
             
-            // Update the published property on the main thread
             DispatchQueue.main.async {
                 self?.stepCountsPerHour = self?.convertDateIntoString(stepCounts: stepCounts) ?? []
                 self?.totalNumberOfCompletedStepsDuringTheDay = self?.stepCountsPerHour.reduce(0) { $0 + $1.numberOfSteps } ?? 0
                 // TODO: Save locally using user defaults.
                 self?.saveOrUpdateStepCountsLocallyForToday(stepCounts)
+                self?.dataForTodayAreBeingRefreshed = false
             }
         }
         

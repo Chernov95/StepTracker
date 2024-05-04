@@ -28,13 +28,11 @@ class HistoryViewModel: ObservableObject {
         generateMockMonthlyStepCount()
     }
     
-    
     func fetchStepData() async {
         guard !bearerToken.isEmpty else {
             print("Bearer token is empty")
             return
         }
-        
         let stepsURL = URL(string: "https://testapi.mindware.us/steps")!
         var request = URLRequest(url: stepsURL)
         request.httpMethod = "GET"
@@ -64,7 +62,6 @@ class HistoryViewModel: ObservableObject {
     }
    
     //MARK: For testing purposes on simulator
-    
     func generateMockWeeklyStepCount() {
         let dayNames = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
         var activityForTheWeekTemp = [WeeklyActivity]()

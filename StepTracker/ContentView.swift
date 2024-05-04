@@ -27,10 +27,17 @@ struct ContentView: View {
             Spacer()
             if viewModel.selectedTab == .today {
                 if !viewModel.stepCountsPerHour.isEmpty {
-                    TodayView(stepCountsPerHour: viewModel.stepCountsPerHour,
-                              percentOfCompletedSteps: viewModel.getPercentOfCompletedSteps(),
-                              totalNumberOfCompletedStepsDuringTheDay: viewModel.totalNumberOfCompletedStepsDuringTheDay,
-                              targetedNumberOfSteps: viewModel.targetedNumberOfSteps)
+                    ZStack {
+                        TodayView(stepCountsPerHour: viewModel.stepCountsPerHour,
+                                  percentOfCompletedSteps: viewModel.getPercentOfCompletedSteps(),
+                                  totalNumberOfCompletedStepsDuringTheDay: viewModel.totalNumberOfCompletedStepsDuringTheDay,
+                                  targetedNumberOfSteps: viewModel.targetedNumberOfSteps)
+                        if viewModel.dataForTodayAreBeingRefreshed {
+                            ProgressView()
+                        } else {
+                            EmptyView()
+                        }
+                    }
                 } else {
                     ProgressView()
                 }
