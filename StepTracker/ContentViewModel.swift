@@ -20,6 +20,7 @@ class ContentViewModel: ObservableObject {
     @Published var selectedTab: Tabs = .today
     @Published var dataForTodayAreBeingRefreshed = false
     @Published var newStepsDataForTodayHasBeenFetchedFromHealthKit = false
+    @Published var healthDataAuthorizationHasBeenGranted = false
     
     var bearerToken: String = ""
     
@@ -31,7 +32,7 @@ class ContentViewModel: ObservableObject {
         retrieveStepCountsForTodayFromLocalStorage()
     }
     
-    func requestHealthDataAuthorizationAndQueryDailyStepCount() async {
+    func requestHealthDataAuthorization() async {
         guard HKHealthStore.isHealthDataAvailable() else {
             print("DEBUG:: HealthKit is not available on this device.")
             return
@@ -46,7 +47,8 @@ class ContentViewModel: ObservableObject {
         do {
             try await healthStore.__requestAuthorization(toShare: nil, read: [stepCountType])
             // Authorization granted, proceed with querying step count data
-            queryAndDisplayFreshDailyStepCountFromHealthKit()
+            healthDataAuthorizationHasBeenGranted = true
+            print("Health data authorization has been granted")
         } catch let error {
             print("DEBUG:: Authorization request error: \(error.localizedDescription)")
         }
@@ -73,6 +75,7 @@ class ContentViewModel: ObservableObject {
             return false // If conversion fails, maintain original order
         }
         totalNumberOfCompletedStepsDuringTheDay = stepCountsPerHour.reduce(0) { $0 + $1.numberOfSteps }
+        print("Local data has been displayed")
     }
 
     func queryAndDisplayFreshDailyStepCountFromHealthKit() {
@@ -122,6 +125,7 @@ class ContentViewModel: ObservableObject {
                 self?.saveOrUpdateStepCountsForTodayInLocalStorage(stepCounts)
                 self?.dataForTodayAreBeingRefreshed = false
                 self?.newStepsDataForTodayHasBeenFetchedFromHealthKit = true
+                print("New data from health kit are displayed")
             }
         }
         

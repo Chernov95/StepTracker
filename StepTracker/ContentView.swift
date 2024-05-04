@@ -49,7 +49,12 @@ struct ContentView: View {
         .padding(.top, viewModel.constants.containerTopPadding)
         .onAppear {
             Task {
-                await viewModel.requestHealthDataAuthorizationAndQueryDailyStepCount()
+                await viewModel.requestHealthDataAuthorization()
+            }
+        }
+        .onChange(of: viewModel.healthDataAuthorizationHasBeenGranted) {_, isGranted in
+            if isGranted {
+                viewModel.queryAndDisplayFreshDailyStepCountFromHealthKit()
             }
         }
         .onChange(of: viewModel.newStepsDataForTodayHasBeenFetchedFromHealthKit) {
