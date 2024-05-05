@@ -61,7 +61,7 @@ class HistoryViewModel: ObservableObject {
         activityForTheMonth = mapToMonthlyActivity(from: responce)
     }
     
-    func mapToLastSevenDaysActivity(from data: [StepDataResponce]) -> [WeeklyActivity] {
+    private func mapToLastSevenDaysActivity(from data: [StepDataResponce]) -> [WeeklyActivity] {
         let calendar = Calendar.current
         let today = Date()
         
@@ -114,34 +114,6 @@ class HistoryViewModel: ObservableObject {
         return thisMonthData.map { data in
             let dayOfMonth = getDayOfMonth(from: data.stepsDate)
             return MonthlyActivity(date: dayOfMonth, numberOfSteps: data.stepsTotalByDay)
-        }
-    }
-
-    private func getDayOfWeek(from dateString: String) -> String {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd"
-        guard let date = dateFormatter.date(from: dateString) else { return "" }
-        
-        let calendar = Calendar.current
-        let weekday = calendar.component(.weekday, from: date)
-        
-        switch weekday {
-        case 1:
-            return "Sun"
-        case 2:
-            return "Mon"
-        case 3:
-            return "Tue"
-        case 4:
-            return "Wed"
-        case 5:
-            return "Thu"
-        case 6:
-            return "Fri"
-        case 7:
-            return "Sat"
-        default:
-            return ""
         }
     }
 
