@@ -57,10 +57,11 @@ class HistoryViewModel: ObservableObject {
     }
     
     private func mapStepsDataResponce(from responce: [StepDataResponce]) {
-        activityForTheWeek = getLastSevenDaysActivity(from: responce)
+        activityForTheWeek = mapToLastSevenDaysActivity(from: responce)
         activityForTheMonth = mapToMonthlyActivity(from: responce)
     }
-    func getLastSevenDaysActivity(from data: [StepDataResponce]) -> [WeeklyActivity] {
+    
+    func mapToLastSevenDaysActivity(from data: [StepDataResponce]) -> [WeeklyActivity] {
         let calendar = Calendar.current
         let today = Date()
         
@@ -94,8 +95,8 @@ class HistoryViewModel: ObservableObject {
         // Get the start and end dates of the current month
         let calendar = Calendar.current
         let currentDate = Date()
-        let startOfMonth = calendar.date(from: calendar.dateComponents([.year, .month], from: currentDate))!
-        guard let endOfMonth = calendar.date(byAdding: DateComponents(month: 1, day: -1), to: startOfMonth) else {
+        guard let startOfMonth = calendar.date(from: calendar.dateComponents([.year, .month], from: currentDate)),
+              let endOfMonth = calendar.date(byAdding: DateComponents(month: 1, day: -1), to: startOfMonth) else {
             return []
         }
         
