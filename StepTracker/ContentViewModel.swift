@@ -21,13 +21,13 @@ class ContentViewModel: ObservableObject {
     @Published var dataForTodayAreBeingFetchedFromHealthKit = false
     @Published var newStepsDataForTodayHasBeenFetchedFromHealthKit = false
     @Published var healthDataAuthorizationHasBeenGranted = false
+    @Published var bearerToken: String? = nil
     
     private let healthStore = HKHealthStore()
     let targetedNumberOfSteps = 10_000
     let constants = Constants()
-    var bearerToken: String? = nil
     var idOfStepsDataForTodayInBackend: Int? = nil
-    let userName = "jeff12345"
+    let userName = "pylypchek"
     
     init() {
         retrieveStepCountsForTodayFromLocalStorage()

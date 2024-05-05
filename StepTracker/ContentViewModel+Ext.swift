@@ -8,7 +8,7 @@
 import Foundation
 
 extension ContentViewModel {
-    
+    @MainActor
     func fetchBearerToken() async {
         let authURL = URL(string: "https://testapi.mindware.us/auth/local")!
         let authData = ["identifier": "user1@test.com", "password": "Test123!"]

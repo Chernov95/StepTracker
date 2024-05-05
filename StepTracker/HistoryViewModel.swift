@@ -18,10 +18,10 @@ enum Periods: String {
 class HistoryViewModel: ObservableObject {
     @Published var selectedPeriod: Periods = .weekly
     @Published var activityForTheWeek = [WeeklyActivity]()
+    @Published var activityForTheMonth = [MonthlyActivity]()
     let constants = Constants()
     let bearerToken: String
     let userName: String
-    var activityForTheMonth = [MonthlyActivity]()
     init(bearerToken: String, userName: String) {
         self.bearerToken = bearerToken
         self.userName = userName
@@ -47,7 +47,6 @@ class HistoryViewModel: ObservableObject {
             if let decodedResponse = try? JSONDecoder().decode([StepDataResponce].self, from: data) {
                 print("decoded responce is \(decodedResponse)")
                 self.mapStepsDataResponce(from: decodedResponse)
-                
             } else {
                 let responseString = String(data: data, encoding: .utf8)
                 print("Error decoding response: \(responseString ?? "No data")")
@@ -57,33 +56,38 @@ class HistoryViewModel: ObservableObject {
         }
     }
     
-   private func mapStepsDataResponce(from responce: [StepDataResponce]) {
-       activityForTheWeek = mapToWeeklyActivity(from: responce)
+    private func mapStepsDataResponce(from responce: [StepDataResponce]) {
+        activityForTheWeek = getLastSevenDaysActivity(from: responce)
         activityForTheMonth = mapToMonthlyActivity(from: responce)
-        print("Activity for the week is \(activityForTheWeek)")
-        print("Activity for the month is \(activityForTheMonth)")
     }
-    
-    func mapToWeeklyActivity(from response: [StepDataResponce]) -> [WeeklyActivity] {
-        // Get the start and end dates of the current week
+    func getLastSevenDaysActivity(from data: [StepDataResponce]) -> [WeeklyActivity] {
         let calendar = Calendar.current
-        let currentDate = Date()
-        let startOfWeek = calendar.date(from: calendar.dateComponents([.yearForWeekOfYear, .weekOfYear], from: currentDate))!
-        let endOfWeek = calendar.date(byAdding: .day, value: 6, to: startOfWeek)!
+        let today = Date()
         
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd"
-        
-        // Filter response data for the current week
-        let thisWeekData = response.filter { data in
-            guard let dataDate = calendar.date(from: calendar.dateComponents([.yearForWeekOfYear, .weekOfYear], from: dateFormatter.date(from: data.stepsDate)!)) else { return false }
-            return dataDate >= startOfWeek && dataDate <= endOfWeek
+        // Filter data for the last 7 days
+        let lastSevenDaysData = data.filter { response in
+            guard let date = DateFormatter.iso8601Full.date(from: response.stepsDate) else {
+                print("Failed to parse date from string: \(response.stepsDate)")
+                return false
+            }
+            return calendar.isDate(date, inSameDayAs: today) ||
+                   calendar.dateComponents([.day], from: date, to: today).day! < 7
         }
         
-        return thisWeekData.map { data in
-            let dayOfWeek = getDayOfWeek(from: data.stepsDate)
-            return WeeklyActivity(dayName: dayOfWeek, numberOfSteps: data.stepsTotalByDay)
+        // Group data by day
+        var weeklyActivityData = [WeeklyActivity]()
+        for i in 0..<7 {
+            let date = calendar.date(byAdding: .day, value: -i, to: today)!
+            let dateString = DateFormatter.iso8601Full.string(from: date)
+            
+            let dailyData = lastSevenDaysData.filter { $0.stepsDate == dateString }
+            let totalSteps = dailyData.reduce(0) { $0 + ($1.stepsTotalByDay) }
+            
+            let dayName = calendar.shortWeekdaySymbols[calendar.component(.weekday, from: date) - 1]
+            weeklyActivityData.append(WeeklyActivity(dayName: dayName, numberOfSteps: totalSteps))
         }
+        
+        return weeklyActivityData.reversed() // Reverse the order to get the days in chronological order
     }
     
     private func mapToMonthlyActivity(from response: [StepDataResponce]) -> [MonthlyActivity] {
@@ -159,4 +163,14 @@ extension HistoryViewModel {
         let barMarkWidth: MarkDimension = 50
         let chartVisibleDomainLength = 4
     }
+}
+extension DateFormatter {
+    static let iso8601Full: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd"
+        formatter.calendar = Calendar(identifier: .iso8601)
+        formatter.timeZone = TimeZone(secondsFromGMT: 0)
+        formatter.locale = Locale(identifier: "en_US_POSIX")
+        return formatter
+    }()
 }

@@ -21,6 +21,7 @@ struct ContentView: View {
                 }
                 .pickerStyle(.segmented)
                 .frame(width: viewModel.constants.pickerWidth)
+                .disabled(viewModel.bearerToken == nil)
                 Spacer()
             }
             .padding(.leading, viewModel.constants.pickerContainerLeadingPadding)
