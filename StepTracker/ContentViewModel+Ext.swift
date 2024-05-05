@@ -145,7 +145,7 @@ extension ContentViewModel {
             print("Bearer token is nil")
             return
         }
-        guard stepCountsPerHour.isEmpty else {
+        guard !stepCountsPerHour.isEmpty else {
             print("Steps data are empty")
             return
         }
