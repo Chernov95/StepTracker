@@ -29,7 +29,10 @@ class HistoryViewModel: ObservableObject {
     
     @MainActor
     func fetchAndMapStepDataForOneMonth() async {
-        let stepsURL = URL(string: "https://testapi.mindware.us/steps?username=\(userName)")!
+        guard let stepsURL = URL(string: "https://testapi.mindware.us/steps?username=\(userName)") else {
+            print("Invalid url for fetching users activity")
+            return
+        }
         var request = URLRequest(url: stepsURL)
         request.httpMethod = "GET"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
@@ -42,6 +45,7 @@ class HistoryViewModel: ObservableObject {
                 return
             }
             if let decodedResponse = try? JSONDecoder().decode([StepDataResponce].self, from: data) {
+                print("decoded responce is \(decodedResponse)")
                 self.mapStepsDataResponce(from: decodedResponse)
                 
             } else {
@@ -53,22 +57,56 @@ class HistoryViewModel: ObservableObject {
         }
     }
     
-   private func mapStepsDataResponce(from: [StepDataResponce]) {
-        activityForTheWeek = mapToWeeklyActivity(from: from)
-        activityForTheMonth = mapToMonthlyActivity(from: from)
+   private func mapStepsDataResponce(from responce: [StepDataResponce]) {
+       activityForTheWeek = mapToWeeklyActivity(from: responce)
+        activityForTheMonth = mapToMonthlyActivity(from: responce)
         print("Activity for the week is \(activityForTheWeek)")
         print("Activity for the month is \(activityForTheMonth)")
     }
     
-    private func mapToWeeklyActivity(from response: [StepDataResponce]) -> [WeeklyActivity] {
-        response.map { data in
+    func mapToWeeklyActivity(from response: [StepDataResponce]) -> [WeeklyActivity] {
+        // Get the start and end dates of the current week
+        let calendar = Calendar.current
+        let currentDate = Date()
+        let startOfWeek = calendar.date(from: calendar.dateComponents([.yearForWeekOfYear, .weekOfYear], from: currentDate))!
+        let endOfWeek = calendar.date(byAdding: .day, value: 6, to: startOfWeek)!
+        
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        
+        // Filter response data for the current week
+        let thisWeekData = response.filter { data in
+            guard let dataDate = calendar.date(from: calendar.dateComponents([.yearForWeekOfYear, .weekOfYear], from: dateFormatter.date(from: data.stepsDate)!)) else { return false }
+            return dataDate >= startOfWeek && dataDate <= endOfWeek
+        }
+        
+        return thisWeekData.map { data in
             let dayOfWeek = getDayOfWeek(from: data.stepsDate)
             return WeeklyActivity(dayName: dayOfWeek, numberOfSteps: data.stepsTotalByDay)
         }
     }
     
     private func mapToMonthlyActivity(from response: [StepDataResponce]) -> [MonthlyActivity] {
-        response.map { data in
+        // Get the start and end dates of the current month
+        let calendar = Calendar.current
+        let currentDate = Date()
+        let startOfMonth = calendar.date(from: calendar.dateComponents([.year, .month], from: currentDate))!
+        guard let endOfMonth = calendar.date(byAdding: DateComponents(month: 1, day: -1), to: startOfMonth) else {
+            return []
+        }
+        
+        // Initialize date formatter
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        
+        // Filter response data for the current month
+        let thisMonthData = response.filter { data in
+            guard let dataDate = dateFormatter.date(from: data.stepsDate) else { return false }
+            return dataDate >= startOfMonth && dataDate <= endOfMonth
+        }
+        
+        // Map filtered data to MonthlyActivity structs
+        return thisMonthData.map { data in
             let dayOfMonth = getDayOfMonth(from: data.stepsDate)
             return MonthlyActivity(date: dayOfMonth, numberOfSteps: data.stepsTotalByDay)
         }

@@ -153,7 +153,6 @@ extension ContentViewModel {
             print("invalid url for posting daily activity")
             return
         }
-        print("StepsURL is \(stepsURL)")
         
         let stepsData = [
             "username": userName,
