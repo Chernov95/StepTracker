@@ -60,6 +60,7 @@ class HistoryViewModel: ObservableObject {
     private func mapStepsDataResponce(from responce: [StepDataResponce]) {
         activityForTheWeek = mapToLastSevenDaysActivity(from: responce)
         activityForTheMonth = mapToMonthlyActivity(from: responce)
+        print("Acitvity for the month is \(activityForTheMonth)")
     }
     
     private func mapToLastSevenDaysActivity(from data: [StepDataResponce]) -> [WeeklyActivity] {
@@ -136,9 +137,9 @@ extension HistoryViewModel {
         let dateTitle = "Date"
         let noDataTitle = "No data"
         let barMarkWidthForSevenDays: MarkDimension = 40
-        let barMarkWidthForOneMonth: MarkDimension = 25
+        let barMarkWidthForOneMonth: MarkDimension = 50
         let chartVisibleDomainLengthForSevenDays = 7
-        let chartVisibleDomainLengthForOneMonth = 10
+        let chartVisibleDomainLengthForOneMonth = 4
     }
 }
 extension DateFormatter {

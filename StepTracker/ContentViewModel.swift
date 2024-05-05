@@ -27,7 +27,7 @@ class ContentViewModel: ObservableObject {
     let targetedNumberOfSteps = 10_000
     let constants = Constants()
     var idOfStepsDataForTodayInBackend: Int? = nil
-    let userName = "pylypcheg"
+    let userName = "pylypcheg123"
     
     init() {
         retrieveStepCountsForTodayFromLocalStorage()

@@ -66,10 +66,11 @@ struct HistoryView: View {
                     BarMark(
                         x: .value(viewModel.constants.dateTitle, day.date),
                         y: .value(viewModel.constants.stepsTitle, day.numberOfSteps),
-                        width: viewModel.constants.barMarkWidthForSevenDays
+                        width: viewModel.constants.barMarkWidthForOneMonth
                     )
                     .annotation(position: .top) {
                         Text("\(day.numberOfSteps)")
+                            .font(.caption2)
                     }
                     .foregroundStyle(.blue.gradient)
                 }
