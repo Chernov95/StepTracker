@@ -18,15 +18,14 @@ class ContentViewModel: ObservableObject {
     @Published var stepCountsPerHour: [HourlyActivity] = []
     @Published var totalNumberOfCompletedStepsDuringTheDay = 0
     @Published var selectedTab: Tabs = .today
-    @Published var dataForTodayAreBeingRefreshed = false
+    @Published var dataForTodayAreBeingFetchedFromHealthKit = false
     @Published var newStepsDataForTodayHasBeenFetchedFromHealthKit = false
     @Published var healthDataAuthorizationHasBeenGranted = false
-    
-    var bearerToken: String = ""
     
     private let healthStore = HKHealthStore()
     let targetedNumberOfSteps = 10_000
     let constants = Constants()
+    var bearerToken: String = ""
     
     init() {
         retrieveStepCountsForTodayFromLocalStorage()
@@ -82,7 +81,7 @@ class ContentViewModel: ObservableObject {
         // Define the date range for which you want to fetch step count data (e.g., past 24 hours)
         DispatchQueue.main.async {
             if !self.stepCountsPerHour.isEmpty {
-                self.dataForTodayAreBeingRefreshed = true
+                self.dataForTodayAreBeingFetchedFromHealthKit = true
             }
         }
         let calendar = Calendar.current
@@ -123,7 +122,7 @@ class ContentViewModel: ObservableObject {
                 self?.stepCountsPerHour = self?.getConvertedHourlyActivityModel(stepCounts: stepCounts) ?? []
                 self?.totalNumberOfCompletedStepsDuringTheDay = self?.stepCountsPerHour.reduce(0) { $0 + $1.numberOfSteps } ?? 0
                 self?.saveOrUpdateStepCountsForTodayInLocalStorage(stepCounts)
-                self?.dataForTodayAreBeingRefreshed = false
+                self?.dataForTodayAreBeingFetchedFromHealthKit = false
                 self?.newStepsDataForTodayHasBeenFetchedFromHealthKit = true
                 print("New data from health kit are displayed")
             }

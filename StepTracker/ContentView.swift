@@ -32,7 +32,7 @@ struct ContentView: View {
                                   percentOfCompletedSteps: viewModel.getPercentOfCompletedSteps(),
                                   totalNumberOfCompletedStepsDuringTheDay: viewModel.totalNumberOfCompletedStepsDuringTheDay,
                                   targetedNumberOfSteps: viewModel.targetedNumberOfSteps)
-                        if viewModel.dataForTodayAreBeingRefreshed {
+                        if viewModel.dataForTodayAreBeingFetchedFromHealthKit {
                             ProgressView()
                         } else {
                             EmptyView()

@@ -73,7 +73,6 @@ class HistoryViewModel: ObservableObject {
     }
     
     //MARK: For testing purposes on simulator
-
     func generateMockMonthlyStepCount() {
         var activityForTheMonthTemp = [MonthlyActivity]()
         
