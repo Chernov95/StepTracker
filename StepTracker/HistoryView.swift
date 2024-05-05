@@ -31,7 +31,7 @@ struct HistoryView: View {
         }
         .onAppear {
             Task {
-                await viewModel.fetchAndParseStepDataForOneMonth()
+                await viewModel.fetchAndMapStepDataForOneMonth()
             }
         }
     }
@@ -39,8 +39,6 @@ struct HistoryView: View {
     private func displayBarChart(for selectedPeriod: Periods) -> some View {
         if selectedPeriod == .weekly {
             if viewModel.activityForTheWeek.isEmpty {
-//                viewModel.queryWeeklyStepCount()
-                //                viewModel.generateMockWeeklyStepCount()
                 return AnyView(ProgressView())
             } else {
                 return AnyView(
@@ -61,8 +59,6 @@ struct HistoryView: View {
             }
         } else {
             if viewModel.activityForTheMonth.isEmpty {
-//                viewModel.queryMonthlyStepCount()
-                //                viewModel.generateMockMonthlyStepCount()
                 return AnyView(ProgressView())
             } else {
                 return AnyView(Chart(viewModel.activityForTheMonth, id: \.date) { day in

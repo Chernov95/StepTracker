@@ -28,11 +28,7 @@ class HistoryViewModel: ObservableObject {
     }
     
     @MainActor
-    func fetchAndParseStepDataForOneMonth() async {
-        guard !bearerToken.isEmpty else {
-            print("Bearer token is empty")
-            return
-        }
+    func fetchAndMapStepDataForOneMonth() async {
         let stepsURL = URL(string: "https://testapi.mindware.us/steps?username=\(userName)")!
         var request = URLRequest(url: stepsURL)
         request.httpMethod = "GET"
@@ -40,19 +36,14 @@ class HistoryViewModel: ObservableObject {
         request.setValue("Bearer \(bearerToken)", forHTTPHeaderField: "Authorization")
         do {
             let (data, response) = try await URLSession.shared.data(for: request)
-            
             guard let httpResponse = response as? HTTPURLResponse, (200...299).contains(httpResponse.statusCode) else {
                 let responseString = String(data: data, encoding: .utf8)
                 print("Error response: \(responseString ?? "No data")")
                 return
             }
-            
             if let decodedResponse = try? JSONDecoder().decode([StepDataResponce].self, from: data) {
-              
-                    // Handle decoded response as needed
-                    print("decoded response: \(decodedResponse)")
-                    self.parseStepsData(stepDataResponce: decodedResponse)
-              
+                self.mapStepsDataResponce(from: decodedResponse)
+                
             } else {
                 let responseString = String(data: data, encoding: .utf8)
                 print("Error decoding response: \(responseString ?? "No data")")
@@ -62,28 +53,28 @@ class HistoryViewModel: ObservableObject {
         }
     }
     
-    func parseStepsData(stepDataResponce: [StepDataResponce]) {
-        activityForTheWeek = mapToWeeklyActivity(from: stepDataResponce)
-        activityForTheMonth = mapToMonthlyActivity(from: stepDataResponce)
+   private func mapStepsDataResponce(from: [StepDataResponce]) {
+        activityForTheWeek = mapToWeeklyActivity(from: from)
+        activityForTheMonth = mapToMonthlyActivity(from: from)
         print("Activity for the week is \(activityForTheWeek)")
         print("Activity for the month is \(activityForTheMonth)")
     }
     
     private func mapToWeeklyActivity(from response: [StepDataResponce]) -> [WeeklyActivity] {
-        return response.map { data in
+        response.map { data in
             let dayOfWeek = getDayOfWeek(from: data.stepsDate)
             return WeeklyActivity(dayName: dayOfWeek, numberOfSteps: data.stepsTotalByDay)
         }
     }
-
+    
     private func mapToMonthlyActivity(from response: [StepDataResponce]) -> [MonthlyActivity] {
-        return response.map { data in
+        response.map { data in
             let dayOfMonth = getDayOfMonth(from: data.stepsDate)
             return MonthlyActivity(date: dayOfMonth, numberOfSteps: data.stepsTotalByDay)
         }
     }
 
-    func getDayOfWeek(from dateString: String) -> String {
+    private func getDayOfWeek(from dateString: String) -> String {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd"
         guard let date = dateFormatter.date(from: dateString) else { return "" }
@@ -111,7 +102,7 @@ class HistoryViewModel: ObservableObject {
         }
     }
 
-    func getDayOfMonth(from dateString: String) -> Int {
+    private func getDayOfMonth(from dateString: String) -> Int {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd"
         guard let date = dateFormatter.date(from: dateString) else { return 0 }
@@ -119,28 +110,6 @@ class HistoryViewModel: ObservableObject {
         let calendar = Calendar.current
         let dayOfMonth = calendar.component(.day, from: date)
         return dayOfMonth
-    }
-   
-    //MARK: For testing purposes on simulator
-    private func generateMockWeeklyStepCount() {
-        let dayNames = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
-        var activityForTheWeekTemp = [WeeklyActivity]()
-        for day in dayNames {
-            let activity = WeeklyActivity(dayName: day, numberOfSteps: Int.random(in: 0...10000))
-            activityForTheWeekTemp.append(activity)
-        }
-        activityForTheWeek = activityForTheWeekTemp
-    }
-    
-    //MARK: For testing purposes on simulator
-    private func generateMockMonthlyStepCount() {
-        var activityForTheMonthTemp = [MonthlyActivity]()
-        
-        for date in 1...31 {
-            let activity = MonthlyActivity(date: date, numberOfSteps: Int.random(in: 0...15000))
-            activityForTheMonthTemp.append(activity)
-        }
-        activityForTheMonth = activityForTheMonthTemp
     }
 }
 
