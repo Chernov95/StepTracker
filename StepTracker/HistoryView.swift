@@ -31,7 +31,7 @@ struct HistoryView: View {
         }
         .onAppear {
             Task {
-                await viewModel.fetchStepData()
+                await viewModel.fetchAndParseStepDataForOneMonth()
             }
         }
     }

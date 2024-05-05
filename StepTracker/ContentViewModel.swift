@@ -25,9 +25,9 @@ class ContentViewModel: ObservableObject {
     private let healthStore = HKHealthStore()
     let targetedNumberOfSteps = 10_000
     let constants = Constants()
-    var bearerToken: String = ""
+    var bearerToken: String? = nil
     var idOfStepsDataForTodayInBackend: Int? = nil
-    let userName = "jeff1234"
+    let userName = "jeff12345"
     
     init() {
         retrieveStepCountsForTodayFromLocalStorage()

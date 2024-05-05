@@ -14,23 +14,21 @@ enum Periods: String {
     case monthly = "1 Month"
 }
 
-@MainActor
+
 class HistoryViewModel: ObservableObject {
     @Published var selectedPeriod: Periods = .weekly
     @Published var activityForTheWeek = [WeeklyActivity]()
-    @Published var activityForTheMonth = [MonthlyActivity]()
-    private let healthStore = HKHealthStore()
     let constants = Constants()
     let bearerToken: String
     let userName: String
+    var activityForTheMonth = [MonthlyActivity]()
     init(bearerToken: String, userName: String) {
         self.bearerToken = bearerToken
         self.userName = userName
-        generateMockWeeklyStepCount()
-        generateMockMonthlyStepCount()
     }
     
-    func fetchStepData() async {
+    @MainActor
+    func fetchAndParseStepDataForOneMonth() async {
         guard !bearerToken.isEmpty else {
             print("Bearer token is empty")
             return
@@ -50,10 +48,11 @@ class HistoryViewModel: ObservableObject {
             }
             
             if let decodedResponse = try? JSONDecoder().decode([StepDataResponce].self, from: data) {
-                DispatchQueue.main.async {
+              
                     // Handle decoded response as needed
                     print("decoded response: \(decodedResponse)")
-                }
+                    self.parseStepsData(stepDataResponce: decodedResponse)
+              
             } else {
                 let responseString = String(data: data, encoding: .utf8)
                 print("Error decoding response: \(responseString ?? "No data")")
@@ -62,9 +61,68 @@ class HistoryViewModel: ObservableObject {
             print("Error fetching step data: \(error.localizedDescription)")
         }
     }
+    
+    func parseStepsData(stepDataResponce: [StepDataResponce]) {
+        activityForTheWeek = mapToWeeklyActivity(from: stepDataResponce)
+        activityForTheMonth = mapToMonthlyActivity(from: stepDataResponce)
+        print("Activity for the week is \(activityForTheWeek)")
+        print("Activity for the month is \(activityForTheMonth)")
+    }
+    
+    private func mapToWeeklyActivity(from response: [StepDataResponce]) -> [WeeklyActivity] {
+        return response.map { data in
+            let dayOfWeek = getDayOfWeek(from: data.stepsDate)
+            return WeeklyActivity(dayName: dayOfWeek, numberOfSteps: data.stepsTotalByDay)
+        }
+    }
+
+    private func mapToMonthlyActivity(from response: [StepDataResponce]) -> [MonthlyActivity] {
+        return response.map { data in
+            let dayOfMonth = getDayOfMonth(from: data.stepsDate)
+            return MonthlyActivity(date: dayOfMonth, numberOfSteps: data.stepsTotalByDay)
+        }
+    }
+
+    func getDayOfWeek(from dateString: String) -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        guard let date = dateFormatter.date(from: dateString) else { return "" }
+        
+        let calendar = Calendar.current
+        let weekday = calendar.component(.weekday, from: date)
+        
+        switch weekday {
+        case 1:
+            return "Sun"
+        case 2:
+            return "Mon"
+        case 3:
+            return "Tue"
+        case 4:
+            return "Wed"
+        case 5:
+            return "Thu"
+        case 6:
+            return "Fri"
+        case 7:
+            return "Sat"
+        default:
+            return ""
+        }
+    }
+
+    func getDayOfMonth(from dateString: String) -> Int {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        guard let date = dateFormatter.date(from: dateString) else { return 0 }
+        
+        let calendar = Calendar.current
+        let dayOfMonth = calendar.component(.day, from: date)
+        return dayOfMonth
+    }
    
     //MARK: For testing purposes on simulator
-    func generateMockWeeklyStepCount() {
+    private func generateMockWeeklyStepCount() {
         let dayNames = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
         var activityForTheWeekTemp = [WeeklyActivity]()
         for day in dayNames {
@@ -75,7 +133,7 @@ class HistoryViewModel: ObservableObject {
     }
     
     //MARK: For testing purposes on simulator
-    func generateMockMonthlyStepCount() {
+    private func generateMockMonthlyStepCount() {
         var activityForTheMonthTemp = [MonthlyActivity]()
         
         for date in 1...31 {

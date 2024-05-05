@@ -42,7 +42,7 @@ extension ContentViewModel {
     }
     
     func postNumberOfStepsForToday() async {
-        guard !bearerToken.isEmpty else {
+        guard let bearerToken else {
             print("Bearer token is empty")
             return
         }
@@ -84,9 +84,11 @@ extension ContentViewModel {
         }
     }
     
-    // Returns true when there is data for steps for today and total number of steps is different from the device. Return false when there is no data in backend and new data has to be uploaded.
+    // Returns true when there is data for steps for today and total number of steps is different from the device.
+    // Returns false when there is no data in backend and new data has to be uploaded.
+    // Retuns nil when failing to determine
     func thereIsStepsDataForTodayInBackendAndTheyHaveToBeUpdated() async -> Bool? {
-        guard !bearerToken.isEmpty else {
+        guard let bearerToken else {
             print("Bearer token is empty")
             return nil
         }
@@ -108,9 +110,8 @@ extension ContentViewModel {
             }
             
             if let decodedResponse = try? JSONDecoder().decode([StepDataResponce].self, from: data) {
-                print("There is steps data for today \(decodedResponse) it's \(decodedResponse)")
                 if decodedResponse.isEmpty {
-                    print("Decoded responce is empty. Data for today should be uploaded")
+                    print("Decoded responce is empty. Data for today's should be postet")
                     return false
                 } else if decodedResponse.count > 1 {
                     print("Back end has more data on back for today then required")
@@ -140,8 +141,12 @@ extension ContentViewModel {
             print("IdOfTodayStepsDataInBackEnd is nil")
             return
         }
-        guard !bearerToken.isEmpty, !stepCountsPerHour.isEmpty else {
-            print("Bearer token is empty")
+        guard let bearerToken else {
+            print("Bearer token is nil")
+            return
+        }
+        guard stepCountsPerHour.isEmpty else {
+            print("Steps data are empty")
             return
         }
         guard let stepsURL = URL(string: "https://testapi.mindware.us/steps/\(idOfStepsDataForTodayInBackend)") else {

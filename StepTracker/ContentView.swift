@@ -42,7 +42,9 @@ struct ContentView: View {
                     ProgressView()
                 }
             } else {
-                HistoryView(bearerToken: viewModel.bearerToken, userName: viewModel.userName)
+                if let bearerToken = viewModel.bearerToken {
+                    HistoryView(bearerToken: bearerToken, userName: viewModel.userName)
+                }
             }
             Spacer()
         }
