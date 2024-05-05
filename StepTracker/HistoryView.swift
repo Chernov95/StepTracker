@@ -46,15 +46,16 @@ struct HistoryView: View {
                         BarMark(
                             x: .value(viewModel.constants.dayTitle, day.dayName),
                             y: .value(viewModel.constants.stepsTitle, day.numberOfSteps),
-                            width: viewModel.constants.barMarkWidth
+                            width: viewModel.constants.barMarkWidthForSevenDays
                         )
                         .annotation(position: .top) {
-                            Text("\(day.numberOfSteps)")
+                            Text(day.numberOfSteps == 0 ? viewModel.constants.noDataTitle : "\(day.numberOfSteps)")
+                                .font(.caption2)
                         }
                         .foregroundStyle(.blue.gradient)
                     }
                         .chartScrollableAxes(.horizontal)
-                        .chartXVisibleDomain(length: viewModel.constants.chartVisibleDomainLength)
+                        .chartXVisibleDomain(length: viewModel.constants.chartVisibleDomainLengthForSevenDays)
                 )
             }
         } else {
@@ -65,7 +66,7 @@ struct HistoryView: View {
                     BarMark(
                         x: .value(viewModel.constants.dateTitle, day.date),
                         y: .value(viewModel.constants.stepsTitle, day.numberOfSteps),
-                        width: viewModel.constants.barMarkWidth
+                        width: viewModel.constants.barMarkWidthForSevenDays
                     )
                     .annotation(position: .top) {
                         Text("\(day.numberOfSteps)")
@@ -73,7 +74,7 @@ struct HistoryView: View {
                     .foregroundStyle(.blue.gradient)
                 }
                     .chartScrollableAxes(.horizontal)
-                    .chartXVisibleDomain(length: viewModel.constants.chartVisibleDomainLength)
+                    .chartXVisibleDomain(length: viewModel.constants.chartVisibleDomainLengthForOneMonth)
                 )
             }
         }

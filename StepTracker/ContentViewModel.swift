@@ -15,7 +15,7 @@ enum Tabs: String {
 
 @MainActor
 class ContentViewModel: ObservableObject {
-    @Published var stepCountsPerHour: [HourlyActivity] = []
+    @Published var hourlyActivityData: [HourlyActivity] = []
     @Published var totalNumberOfCompletedStepsDuringTheDay = 0
     @Published var selectedTab: Tabs = .today
     @Published var dataForTodayAreBeingFetchedFromHealthKit = false
@@ -27,7 +27,7 @@ class ContentViewModel: ObservableObject {
     let targetedNumberOfSteps = 10_000
     let constants = Constants()
     var idOfStepsDataForTodayInBackend: Int? = nil
-    let userName = "pylypchek"
+    let userName = "pylypcheg"
     
     init() {
         retrieveStepCountsForTodayFromLocalStorage()
@@ -66,8 +66,7 @@ class ContentViewModel: ObservableObject {
             return
         }
         print("Locally saved steps data for today are \(existingStepCounts)")
-        // Update stepCountsPerHour array with data from UserDefaults
-        stepCountsPerHour = existingStepCounts.map { HourlyActivity(time: $0.key, numberOfSteps: $0.value) } .sorted {
+        hourlyActivityData = existingStepCounts.map { HourlyActivity(time: $0.key, numberOfSteps: $0.value) } .sorted {
             let formatter = DateFormatter()
             formatter.dateFormat = "h:mm a"
             if let time1 = formatter.date(from: $0.time), let time2 = formatter.date(from: $1.time) {
@@ -75,14 +74,13 @@ class ContentViewModel: ObservableObject {
             }
             return false // If conversion fails, maintain original order
         }
-        totalNumberOfCompletedStepsDuringTheDay = stepCountsPerHour.reduce(0) { $0 + $1.numberOfSteps }
+        totalNumberOfCompletedStepsDuringTheDay = hourlyActivityData.reduce(0) { $0 + $1.numberOfSteps }
         print("Local data has been displayed")
     }
 
     func queryAndDisplayFreshDailyStepCountFromHealthKit() {
-        // Define the date range for which you want to fetch step count data (e.g., past 24 hours)
         DispatchQueue.main.async {
-            if !self.stepCountsPerHour.isEmpty {
+            if !self.hourlyActivityData.isEmpty {
                 self.dataForTodayAreBeingFetchedFromHealthKit = true
                 print("Fresh data from health kit are being loaded")
             }
@@ -122,8 +120,8 @@ class ContentViewModel: ObservableObject {
             }
             
             DispatchQueue.main.async {
-                self?.stepCountsPerHour = self?.getConvertedHourlyActivityModel(stepCounts: stepCounts) ?? []
-                self?.totalNumberOfCompletedStepsDuringTheDay = self?.stepCountsPerHour.reduce(0) { $0 + $1.numberOfSteps } ?? 0
+                self?.hourlyActivityData = self?.mapHourlyActivityData(stepCounts: stepCounts) ?? []
+                self?.totalNumberOfCompletedStepsDuringTheDay = self?.hourlyActivityData.reduce(0) { $0 + $1.numberOfSteps } ?? 0
                 self?.saveOrUpdateStepCountsForTodayInLocalStorage(stepCounts)
                 self?.dataForTodayAreBeingFetchedFromHealthKit = false
                 self?.newStepsDataForTodayHasBeenFetchedFromHealthKit = true
@@ -135,7 +133,7 @@ class ContentViewModel: ObservableObject {
         healthStore.execute(query)
     }
     
-    private func getConvertedHourlyActivityModel(stepCounts: [(date: Date, stepCount: Int)] ) -> [HourlyActivity] {
+    private func mapHourlyActivityData(stepCounts: [(date: Date, stepCount: Int)] ) -> [HourlyActivity] {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "h:mm a" // 'a' represents AM/PM format
         var convertedSteps = [HourlyActivity]()
@@ -192,7 +190,7 @@ class ContentViewModel: ObservableObject {
             let activity = HourlyActivity(time: hour, numberOfSteps: Int.random(in: 0...5000))
             stepCountsPerHourTemp.append(activity)
         }
-        stepCountsPerHour = stepCountsPerHourTemp
+        hourlyActivityData = stepCountsPerHourTemp
     }
 }
 

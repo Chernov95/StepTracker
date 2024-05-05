@@ -46,7 +46,7 @@ extension ContentViewModel {
             print("Bearer token is empty")
             return
         }
-        guard !stepCountsPerHour.isEmpty else {
+        guard !hourlyActivityData.isEmpty else {
             print("There is no data for posting activity")
             return
         }
@@ -145,7 +145,7 @@ extension ContentViewModel {
             print("Bearer token is nil")
             return
         }
-        guard !stepCountsPerHour.isEmpty else {
+        guard !hourlyActivityData.isEmpty else {
             print("Steps data are empty")
             return
         }

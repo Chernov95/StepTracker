@@ -27,9 +27,9 @@ struct ContentView: View {
             .padding(.leading, viewModel.constants.pickerContainerLeadingPadding)
             Spacer()
             if viewModel.selectedTab == .today {
-                if !viewModel.stepCountsPerHour.isEmpty {
+                if !viewModel.hourlyActivityData.isEmpty {
                     ZStack {
-                        TodayView(stepCountsPerHour: viewModel.stepCountsPerHour,
+                        TodayView(stepCountsPerHour: viewModel.hourlyActivityData,
                                   percentOfCompletedSteps: viewModel.getPercentOfCompletedSteps(),
                                   totalNumberOfCompletedStepsDuringTheDay: viewModel.totalNumberOfCompletedStepsDuringTheDay,
                                   targetedNumberOfSteps: viewModel.targetedNumberOfSteps)

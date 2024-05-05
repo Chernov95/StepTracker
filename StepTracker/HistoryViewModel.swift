@@ -37,6 +37,7 @@ class HistoryViewModel: ObservableObject {
         request.httpMethod = "GET"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.setValue("Bearer \(bearerToken)", forHTTPHeaderField: "Authorization")
+        print("Bearer token is \(bearerToken)")
         do {
             let (data, response) = try await URLSession.shared.data(for: request)
             guard let httpResponse = response as? HTTPURLResponse, (200...299).contains(httpResponse.statusCode) else {
@@ -133,8 +134,11 @@ extension HistoryViewModel {
         let dayTitle = "Day"
         let stepsTitle = "Steps"
         let dateTitle = "Date"
-        let barMarkWidth: MarkDimension = 50
-        let chartVisibleDomainLength = 4
+        let noDataTitle = "No data"
+        let barMarkWidthForSevenDays: MarkDimension = 40
+        let barMarkWidthForOneMonth: MarkDimension = 25
+        let chartVisibleDomainLengthForSevenDays = 7
+        let chartVisibleDomainLengthForOneMonth = 10
     }
 }
 extension DateFormatter {
