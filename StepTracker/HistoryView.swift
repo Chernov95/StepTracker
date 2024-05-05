@@ -10,8 +10,8 @@ import Charts
 
 struct HistoryView: View {
     @ObservedObject private var viewModel: HistoryViewModel
-    init(bearerToken: String) {
-        _viewModel = ObservedObject(wrappedValue: HistoryViewModel(bearerToken: bearerToken))
+    init(bearerToken: String, userName: String) {
+        _viewModel = ObservedObject(wrappedValue: HistoryViewModel(bearerToken: bearerToken, userName: userName))
     }
     
     var body: some View {

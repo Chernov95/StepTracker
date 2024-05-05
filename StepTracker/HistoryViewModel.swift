@@ -22,8 +22,10 @@ class HistoryViewModel: ObservableObject {
     private let healthStore = HKHealthStore()
     let constants = Constants()
     let bearerToken: String
-    init(bearerToken: String) {
+    let userName: String
+    init(bearerToken: String, userName: String) {
         self.bearerToken = bearerToken
+        self.userName = userName
         generateMockWeeklyStepCount()
         generateMockMonthlyStepCount()
     }
@@ -33,7 +35,7 @@ class HistoryViewModel: ObservableObject {
             print("Bearer token is empty")
             return
         }
-        let stepsURL = URL(string: "https://testapi.mindware.us/steps")!
+        let stepsURL = URL(string: "https://testapi.mindware.us/steps?username=\(userName)")!
         var request = URLRequest(url: stepsURL)
         request.httpMethod = "GET"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")

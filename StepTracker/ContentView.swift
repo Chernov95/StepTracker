@@ -42,7 +42,7 @@ struct ContentView: View {
                     ProgressView()
                 }
             } else {
-                HistoryView(bearerToken: viewModel.bearerToken)
+                HistoryView(bearerToken: viewModel.bearerToken, userName: viewModel.userName)
             }
             Spacer()
         }
@@ -59,7 +59,16 @@ struct ContentView: View {
         }
         .onChange(of: viewModel.newStepsDataForTodayHasBeenFetchedFromHealthKit) {
             Task {
-                await viewModel.postHourlyActivityForToday()
+                // Check if there is something for today date
+                // If there is any, make put request otherwise upload a new data
+                // Update back end only for the current day and if there
+                await viewModel.fetchBearerToken()
+                let thereIsStepsDataForTodayInBackend = await viewModel.thereIsStepsDataForTodayInBackendAndTheyHaveToBeUpdated()
+                if thereIsStepsDataForTodayInBackend == true {
+                    await viewModel.updateTotalStepsCountForTodayInBackend()
+                } else if thereIsStepsDataForTodayInBackend == false {
+                    await viewModel.postNumberOfStepsForToday()
+                }
             }
         }
     }

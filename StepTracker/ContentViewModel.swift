@@ -26,6 +26,8 @@ class ContentViewModel: ObservableObject {
     let targetedNumberOfSteps = 10_000
     let constants = Constants()
     var bearerToken: String = ""
+    var idOfStepsDataForTodayInBackend: Int? = nil
+    let userName = "jeff1234"
     
     init() {
         retrieveStepCountsForTodayFromLocalStorage()
@@ -63,7 +65,7 @@ class ContentViewModel: ObservableObject {
             // No data found for the current date
             return
         }
-        
+        print("Locally saved steps data for today are \(existingStepCounts)")
         // Update stepCountsPerHour array with data from UserDefaults
         stepCountsPerHour = existingStepCounts.map { HourlyActivity(time: $0.key, numberOfSteps: $0.value) } .sorted {
             let formatter = DateFormatter()
@@ -82,6 +84,7 @@ class ContentViewModel: ObservableObject {
         DispatchQueue.main.async {
             if !self.stepCountsPerHour.isEmpty {
                 self.dataForTodayAreBeingFetchedFromHealthKit = true
+                print("Fresh data from health kit are being loaded")
             }
         }
         let calendar = Calendar.current
@@ -124,7 +127,7 @@ class ContentViewModel: ObservableObject {
                 self?.saveOrUpdateStepCountsForTodayInLocalStorage(stepCounts)
                 self?.dataForTodayAreBeingFetchedFromHealthKit = false
                 self?.newStepsDataForTodayHasBeenFetchedFromHealthKit = true
-                print("New data from health kit are displayed")
+                print("New data from health kit have been displayed")
             }
         }
         
