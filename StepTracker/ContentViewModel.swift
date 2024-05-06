@@ -27,9 +27,9 @@ class ContentViewModel: ObservableObject {
     let networkManager = NetworkManager.shared
     let targetedNumberOfSteps = 10_000
     let constants = Constants()
+    let userName = "pylypcheg123456"
     var idOfStepsDataForTodayInBackend: Int? = nil
     var backEndHasToBeUpdatedWithTodaysActivity: Bool? = nil
-    let userName = "pylypcheg123456"
     
     init() {
         retrieveStepCountsForTodayFromLocalStorage()
@@ -50,7 +50,10 @@ class ContentViewModel: ObservableObject {
         }
         
         do {
-            try await networkManager.postNumberOfStepsForToday(bearerToken: bearerToken, hourlyActivityData: hourlyActivityData, userName: userName, totalNumberOfCompletedStepsDuringTheDay: totalNumberOfCompletedStepsDuringTheDay)
+            try await networkManager.postNumberOfStepsForToday(bearerToken: bearerToken,
+                                                               hourlyActivityData: hourlyActivityData,
+                                                               userName: userName,
+                                                               totalNumberOfCompletedStepsDuringTheDay: totalNumberOfCompletedStepsDuringTheDay)
         } catch {
             print("DEBUG: Catching error for fetching bearer token")
         }
@@ -64,8 +67,8 @@ class ContentViewModel: ObservableObject {
         
         do {
             let result = try await networkManager.getInformationIfStepsDataForTodayIsInBackendAndItHasToBeUpdated(bearerToken: bearerToken,
-                                                                                                       userName: userName,
-                                                                                                       totalNumberOfCompletedStepsDuringTheDay: totalNumberOfCompletedStepsDuringTheDay)
+                                                                                                                  userName: userName,
+                                                                                                                  totalNumberOfCompletedStepsDuringTheDay: totalNumberOfCompletedStepsDuringTheDay)
             backEndHasToBeUpdatedWithTodaysActivity = result.updateIsRequired
             idOfStepsDataForTodayInBackend = result.idOfStepsDataForTodayInBackend
         } catch {
@@ -85,8 +88,10 @@ class ContentViewModel: ObservableObject {
         
         do {
             try await networkManager.updateTotalStepsCountForTodayInBackend(bearerToken: bearerToken,
-                                                                            userName: userName, idOfStepsDataForTodayInBackend: idOfStepsDataForTodayInBackend,
-                                                                            hourlyActivityData: hourlyActivityData, totalNumberOfCompletedStepsDuringTheDay: totalNumberOfCompletedStepsDuringTheDay)
+                                                                            userName: userName, 
+                                                                            idOfStepsDataForTodayInBackend: idOfStepsDataForTodayInBackend,
+                                                                            hourlyActivityData: hourlyActivityData,
+                                                                            totalNumberOfCompletedStepsDuringTheDay: totalNumberOfCompletedStepsDuringTheDay)
         } catch {
             print("DEBUG: Catching error for updating total steps count for today in backend")
         }

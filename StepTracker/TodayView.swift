@@ -14,8 +14,7 @@ struct TodayView: View {
     init(stepCountsPerHour: [HourlyActivity],
          percentOfCompletedSteps: Int,
          totalNumberOfCompletedStepsDuringTheDay: Int,
-         targetedNumberOfSteps: Int
-    ) {
+         targetedNumberOfSteps: Int) {
         viewModel = TodayViewModel(stepCountsPerHour: stepCountsPerHour,
                                    totalNumberOfCompletedStepsDuringTheDay: totalNumberOfCompletedStepsDuringTheDay, 
                                    percentOfCompletedSteps: percentOfCompletedSteps,

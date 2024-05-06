@@ -11,7 +11,9 @@ import Charts
 struct HistoryView: View {
     @ObservedObject private var viewModel: HistoryViewModel
     init(networkManager: NetworkManager, bearerToken: String, userName: String) {
-        _viewModel = ObservedObject(wrappedValue: HistoryViewModel(networkManager: networkManager, bearerToken: bearerToken, userName: userName))
+        _viewModel = ObservedObject(wrappedValue: HistoryViewModel(networkManager: networkManager,
+                                                                   bearerToken: bearerToken,
+                                                                   userName: userName))
     }
     
     var body: some View {
