@@ -10,8 +10,8 @@ import Charts
 
 struct HistoryView: View {
     @ObservedObject private var viewModel: HistoryViewModel
-    init(bearerToken: String, userName: String) {
-        _viewModel = ObservedObject(wrappedValue: HistoryViewModel(bearerToken: bearerToken, userName: userName))
+    init(networkManager: NetworkManager, bearerToken: String, userName: String) {
+        _viewModel = ObservedObject(wrappedValue: HistoryViewModel(networkManager: networkManager, bearerToken: bearerToken, userName: userName))
     }
     
     var body: some View {
@@ -31,7 +31,7 @@ struct HistoryView: View {
         }
         .onAppear {
             Task {
-                await viewModel.fetchAndMapStepDataForOneMonth()
+                await viewModel.fetchAndMapUserStepData()
             }
         }
     }

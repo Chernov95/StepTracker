@@ -24,6 +24,7 @@
 		C99FBEB32BE1A13000C15009 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C99FBEB22BE1A13000C15009 /* ContentView.swift */; };
 		C99FBEB52BE1A13200C15009 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C99FBEB42BE1A13200C15009 /* Assets.xcassets */; };
 		C99FBEB82BE1A13200C15009 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C99FBEB72BE1A13200C15009 /* Preview Assets.xcassets */; };
+		C9C67E482BE84BE500D9AC3D /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9C67E472BE84BE500D9AC3D /* NetworkManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -46,6 +47,7 @@
 		C99FBEB22BE1A13000C15009 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		C99FBEB42BE1A13200C15009 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		C99FBEB72BE1A13200C15009 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		C9C67E472BE84BE500D9AC3D /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -108,6 +110,7 @@
 				C94E29602BE1C5D9001FCD23 /* TodayViewModel.swift */,
 				C94E29632BE31ABC001FCD23 /* HistoryView.swift */,
 				C94E29652BE31AD1001FCD23 /* HistoryViewModel.swift */,
+				C9C67E472BE84BE500D9AC3D /* NetworkManager.swift */,
 				C94E29672BE31F02001FCD23 /* Model */,
 				C94E295D2BE1AC4F001FCD23 /* Components */,
 				C99FBEB42BE1A13200C15009 /* Assets.xcassets */,
@@ -199,6 +202,7 @@
 				C94E29642BE31ABC001FCD23 /* HistoryView.swift in Sources */,
 				C95FE7812BE59E68004F7A6B /* StepDataResponce.swift in Sources */,
 				C94E295C2BE1A86E001FCD23 /* TodayView.swift in Sources */,
+				C9C67E482BE84BE500D9AC3D /* NetworkManager.swift in Sources */,
 				C95FE77F2BE56179004F7A6B /* ContentViewModel+Ext.swift in Sources */,
 				C94E296D2BE320E1001FCD23 /* MonthlyActivity.swift in Sources */,
 				C94E29612BE1C5D9001FCD23 /* TodayViewModel.swift in Sources */,

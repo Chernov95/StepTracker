@@ -22,38 +22,20 @@ class HistoryViewModel: ObservableObject {
     let constants = Constants()
     let bearerToken: String
     let userName: String
-    init(bearerToken: String, userName: String) {
+    let networkManager: NetworkManager
+    init(networkManager: NetworkManager ,bearerToken: String, userName: String) {
         self.bearerToken = bearerToken
         self.userName = userName
+        self.networkManager = networkManager
     }
     
     @MainActor
-    func fetchAndMapStepDataForOneMonth() async {
-        guard let stepsURL = URL(string: "https://testapi.mindware.us/steps?username=\(userName)") else {
-            print("Invalid url for fetching users activity")
-            return
-        }
-        var request = URLRequest(url: stepsURL)
-        request.httpMethod = "GET"
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.setValue("Bearer \(bearerToken)", forHTTPHeaderField: "Authorization")
-        print("Bearer token is \(bearerToken)")
+    func fetchAndMapUserStepData() async {
         do {
-            let (data, response) = try await URLSession.shared.data(for: request)
-            guard let httpResponse = response as? HTTPURLResponse, (200...299).contains(httpResponse.statusCode) else {
-                let responseString = String(data: data, encoding: .utf8)
-                print("Error response: \(responseString ?? "No data")")
-                return
-            }
-            if let decodedResponse = try? JSONDecoder().decode([StepDataResponce].self, from: data) {
-                print("decoded responce is \(decodedResponse)")
-                self.mapStepsDataResponce(from: decodedResponse)
-            } else {
-                let responseString = String(data: data, encoding: .utf8)
-                print("Error decoding response: \(responseString ?? "No data")")
-            }
+            let response = try await networkManager.fetchUserStepData(bearerToken: bearerToken, userName: userName)
+            mapStepsDataResponce(from: response)
         } catch {
-            print("Error fetching step data: \(error.localizedDescription)")
+            print("DEBUG: Failed to fetch user's data")
         }
     }
     

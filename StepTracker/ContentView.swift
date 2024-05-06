@@ -44,7 +44,7 @@ struct ContentView: View {
                 }
             } else {
                 if let bearerToken = viewModel.bearerToken {
-                    HistoryView(bearerToken: bearerToken, userName: viewModel.userName)
+                    HistoryView(networkManager: viewModel.networkManager, bearerToken: bearerToken, userName: viewModel.userName)
                 }
             }
             Spacer()
@@ -62,14 +62,11 @@ struct ContentView: View {
         }
         .onChange(of: viewModel.newStepsDataForTodayHasBeenFetchedFromHealthKit) {
             Task {
-                // Check if there is something for today date
-                // If there is any, make put request otherwise upload a new data
-                // Update back end only for the current day and if there
                 await viewModel.fetchBearerToken()
-                let thereIsStepsDataForTodayInBackend = await viewModel.thereIsStepsDataForTodayInBackendAndTheyHaveToBeUpdated()
-                if thereIsStepsDataForTodayInBackend == true {
+                await viewModel.getInformationIfStepsDataForTodayIsInBackendAndItHasToBeUpdated()
+                if viewModel.backEndHasToBeUpdatedWithTodaysActivity == true {
                     await viewModel.updateTotalStepsCountForTodayInBackend()
-                } else if thereIsStepsDataForTodayInBackend == false {
+                } else if viewModel.backEndHasToBeUpdatedWithTodaysActivity == false {
                     await viewModel.postNumberOfStepsForToday()
                 }
             }
