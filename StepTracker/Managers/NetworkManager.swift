@@ -176,10 +176,10 @@ class NetworkManager {
                 return (nil, nil)
             } else {
                 if decodedResponse.first?.stepsTotalByDay  == totalNumberOfCompletedStepsDuringTheDay {
-                    print("Total number of steps is the same in backend as on device. Therefore, no need in posting new data. In backend it's \(decodedResponse.first?.stepsTotalByDay) and locally we have \(totalNumberOfCompletedStepsDuringTheDay). Returning nil.")
+                    print("Total number of steps is the same in backend as on device. Therefore, no need in posting new data. In backend it's \(String(describing: decodedResponse.first?.stepsTotalByDay)) and locally we have \(totalNumberOfCompletedStepsDuringTheDay). Returning nil.")
                     return (nil, nil)
                 } else {
-                    print("Health data on device is different from back end. Backend has to be updated, locally we have total numberOfSteps \(totalNumberOfCompletedStepsDuringTheDay), whereas back end has \(decodedResponse.first?.stepsTotalByDay)")
+                    print("Health data on device is different from back end. Backend has to be updated, locally we have total numberOfSteps \(totalNumberOfCompletedStepsDuringTheDay), whereas back end has \(String(describing: decodedResponse.first?.stepsTotalByDay))")
                     return (true, decodedResponse.first?.id)
                 }
             }
