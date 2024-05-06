@@ -8,7 +8,7 @@
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
             uuid = "FC24C7EA-9D4E-436C-8625-416290E4D35E"
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "StepTracker/ContentViewModel.swift"
@@ -24,7 +24,7 @@
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
             uuid = "1BD969B5-29AB-46EE-BA92-713F83A998AB"
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "StepTracker/ContentViewModel+Ext.swift"
@@ -34,57 +34,13 @@
             endingLineNumber = "45"
             landmarkName = "retrieveStepCountsForTodayFromLocalStorage()"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "1BD969B5-29AB-46EE-BA92-713F83A998AB - 7cd24e06fa5b229c"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "StepTracker.ContentViewModel.retrieveStepCountsForTodayFromLocalStorage() -&gt; ()"
-                  moduleName = "StepTracker"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/filipcernov/Desktop/StepTracker/StepTracker/ContentViewModel+Ext.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "45"
-                  endingLineNumber = "45">
-               </Location>
-               <Location
-                  uuid = "1BD969B5-29AB-46EE-BA92-713F83A998AB - 62579f913c3750e1"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 ((key: Swift.String, value: Swift.Int)) -&gt; StepTracker.HourlyActivity in StepTracker.ContentViewModel.retrieveStepCountsForTodayFromLocalStorage() -&gt; ()"
-                  moduleName = "StepTracker"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/filipcernov/Desktop/StepTracker/StepTracker/ContentViewModel+Ext.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "45"
-                  endingLineNumber = "45">
-               </Location>
-               <Location
-                  uuid = "1BD969B5-29AB-46EE-BA92-713F83A998AB - 5c4e07697a0d4c63"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #2 (StepTracker.HourlyActivity, StepTracker.HourlyActivity) -&gt; Swift.Bool in StepTracker.ContentViewModel.retrieveStepCountsForTodayFromLocalStorage() -&gt; ()"
-                  moduleName = "StepTracker"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/filipcernov/Desktop/StepTracker/StepTracker/ContentViewModel+Ext.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "46"
-                  endingLineNumber = "46">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
             uuid = "3BE3780B-75C0-4E62-8AFE-124861D28868"
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "StepTracker/ContentViewModel+Ext.swift"
@@ -93,6 +49,22 @@
             startingLineNumber = "103"
             endingLineNumber = "103"
             landmarkName = "queryAndDisplayFreshDailyStepCountFromHealthKit()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "878F1E34-1C4D-4B2C-B4CF-3B76E8098E7D"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "StepTracker/HistoryViewModel.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "48"
+            endingLineNumber = "48"
+            landmarkName = "fetchAndMapUserStepDataFromBackend()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

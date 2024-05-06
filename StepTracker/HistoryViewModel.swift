@@ -13,7 +13,7 @@ enum Periods: String {
     case weekly = "7 Days"
     case monthly = "1 Month"
 }
-
+@MainActor
 class HistoryViewModel: ObservableObject {
     @Published var selectedPeriod: Periods = .weekly
     @Published var activityForTheWeek = [WeeklyActivity]()
@@ -29,13 +29,26 @@ class HistoryViewModel: ObservableObject {
         print("Bearer token is \(bearerToken)")
     }
     
-    @MainActor
     func fetchAndMapUserStepData() async {
+        let stepsData : [StepDataResponce]
+        let cacheManager = CacheManager.shared
+        if let cachedData = cacheManager.fetchCachedData() {
+            stepsData = cachedData
+            print("Getting steps data from cache")
+        } else {
+            stepsData = await fetchAndMapUserStepDataFromBackend()
+            cacheManager.saveResponceToCahce(response: stepsData)
+        }
+        mapStepsDataResponce(from: stepsData)
+    }
+    
+    private func fetchAndMapUserStepDataFromBackend() async -> [StepDataResponce] {
         do {
             let response = try await networkManager.fetchUserStepData(bearerToken: bearerToken, userName: userName)
-            mapStepsDataResponce(from: response)
+            return response
         } catch {
             print("DEBUG: Catching error for fetching user step data")
+            return []
         }
     }
     
