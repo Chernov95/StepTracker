@@ -14,7 +14,7 @@ struct StepDataResponce: Codable {
     let stepsDate: String
     let stepsDatetime: String
     let stepsCount: Int
-    let stepsTotalByDay: Int
+    var stepsTotalByDay: Int
     let createdDatetime: String?
     let createdAt: String?
     let updatedAt: String?

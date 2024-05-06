@@ -72,7 +72,7 @@ class ContentViewModel: ObservableObject {
             backEndHasToBeUpdatedWithTodaysActivity = result.updateIsRequired
             idOfStepsDataForTodayInBackend = result.idOfStepsDataForTodayInBackend
         } catch {
-            print("DEBUG: Catching error for getting information if steps data in back end needs update")
+            print("DEBUG: Catching error for getting information if steps data in back end needs update \(error.localizedDescription)")
         }
     }
     

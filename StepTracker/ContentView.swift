@@ -70,6 +70,7 @@ struct ContentView: View {
                     await viewModel.getInformationIfStepsDataForTodayIsInBackendAndItHasToBeUpdated()
                     if viewModel.backEndHasToBeUpdatedWithTodaysActivity == true {
                         await viewModel.updateTotalStepsCountForTodayInBackend()
+                        CacheManager.shared.updateStepsInCache(newNumberOfStepsToday: viewModel.totalNumberOfCompletedStepsDuringTheDay)
                     } else if viewModel.backEndHasToBeUpdatedWithTodaysActivity == false {
                         await viewModel.postNumberOfStepsForToday()
                     }
