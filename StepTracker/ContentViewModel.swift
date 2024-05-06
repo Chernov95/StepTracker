@@ -52,9 +52,8 @@ class ContentViewModel: ObservableObject {
         do {
             try await networkManager.postNumberOfStepsForToday(bearerToken: bearerToken, hourlyActivityData: hourlyActivityData, userName: userName, totalNumberOfCompletedStepsDuringTheDay: totalNumberOfCompletedStepsDuringTheDay)
         } catch {
-            // Handle errors...
+            print("DEBUG: Catching error for fetching bearer token")
         }
-        
     }
     
     func  getInformationIfStepsDataForTodayIsInBackendAndItHasToBeUpdated() async {
@@ -67,10 +66,10 @@ class ContentViewModel: ObservableObject {
             let result = try await networkManager.getInformationIfStepsDataForTodayIsInBackendAndItHasToBeUpdated(bearerToken: bearerToken,
                                                                                                        userName: userName,
                                                                                                        totalNumberOfCompletedStepsDuringTheDay: totalNumberOfCompletedStepsDuringTheDay)
-            idOfStepsDataForTodayInBackend = result.idOfStepsDataForTodayInBackend
             backEndHasToBeUpdatedWithTodaysActivity = result.updateIsRequired
+            idOfStepsDataForTodayInBackend = result.idOfStepsDataForTodayInBackend
         } catch {
-            
+            print("DEBUG: Catching error for getting information if steps data in back end needs update")
         }
     }
     
@@ -89,9 +88,8 @@ class ContentViewModel: ObservableObject {
                                                                             userName: userName, idOfStepsDataForTodayInBackend: idOfStepsDataForTodayInBackend,
                                                                             hourlyActivityData: hourlyActivityData, totalNumberOfCompletedStepsDuringTheDay: totalNumberOfCompletedStepsDuringTheDay)
         } catch {
-            
+            print("DEBUG: Catching error for updating total steps count for today in backend")
         }
-        
     }
 }
 

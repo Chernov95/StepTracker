@@ -35,7 +35,7 @@ class HistoryViewModel: ObservableObject {
             let response = try await networkManager.fetchUserStepData(bearerToken: bearerToken, userName: userName)
             mapStepsDataResponce(from: response)
         } catch {
-            print("DEBUG: Failed to fetch user's data")
+            print("DEBUG: Catching error for fetching user step data")
         }
     }
     
