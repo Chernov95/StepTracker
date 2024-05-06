@@ -21,7 +21,7 @@ struct ContentView: View {
                 }
                 .pickerStyle(.segmented)
                 .frame(width: viewModel.constants.pickerWidth)
-                .disabled(viewModel.bearerToken == nil)
+                .disabled(viewModel.bearerToken == nil || viewModel.dataForTodayAreBeingFetchedFromHealthKit == true)
                 Spacer()
             }
             .padding(.leading, viewModel.constants.pickerContainerLeadingPadding)
@@ -60,15 +60,27 @@ struct ContentView: View {
                 viewModel.queryAndDisplayFreshDailyStepCountFromHealthKit()
             }
         }
-        .onChange(of: viewModel.newStepsDataForTodayHasBeenFetchedFromHealthKit) {
-            Task {
-                await viewModel.fetchBearerToken()
-                await viewModel.getInformationIfStepsDataForTodayIsInBackendAndItHasToBeUpdated()
-                if viewModel.backEndHasToBeUpdatedWithTodaysActivity == true {
-                    await viewModel.updateTotalStepsCountForTodayInBackend()
-                } else if viewModel.backEndHasToBeUpdatedWithTodaysActivity == false {
-                    await viewModel.postNumberOfStepsForToday()
+        .onChange(of: viewModel.newStepsDataForTodayHasBeenFetchedFromHealthKit) {_, hasBeenFethced in
+            if hasBeenFethced {
+                Task {
+                    if viewModel.bearerToken == nil {
+                        await viewModel.fetchBearerToken()
+                    }
+                    //MARK: This function might return nil when we fail to determine if steps data should be updated in backend. That's why there is if and else if statements
+                    await viewModel.getInformationIfStepsDataForTodayIsInBackendAndItHasToBeUpdated()
+                    if viewModel.backEndHasToBeUpdatedWithTodaysActivity == true {
+                        await viewModel.updateTotalStepsCountForTodayInBackend()
+                    } else if viewModel.backEndHasToBeUpdatedWithTodaysActivity == false {
+                        await viewModel.postNumberOfStepsForToday()
+                    }
+                    viewModel.newStepsDataForTodayHasBeenFetchedFromHealthKit = false
                 }
+            }
+        }
+        .onReceive(viewModel.timer) { _ in
+            print("20 seconds passed")
+            if viewModel.healthDataAuthorizationHasBeenGranted && viewModel.selectedTab == .today && !viewModel.dataForTodayAreBeingFetchedFromHealthKit {
+                viewModel.queryAndDisplayFreshDailyStepCountFromHealthKit()
             }
         }
     }

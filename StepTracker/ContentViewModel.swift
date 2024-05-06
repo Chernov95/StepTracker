@@ -29,6 +29,7 @@ class ContentViewModel: ObservableObject {
     let userName = "pylypcheg1234567"
     var idOfStepsDataForTodayInBackend: Int? = nil
     var backEndHasToBeUpdatedWithTodaysActivity: Bool? = nil
+    let timer = Timer.publish(every: 20, on: .main, in: .common).autoconnect()
     
     init() {
         retrieveStepCountsForTodayFromLocalStorage()
@@ -54,7 +55,7 @@ class ContentViewModel: ObservableObject {
                                                                userName: userName,
                                                                totalNumberOfCompletedStepsDuringTheDay: totalNumberOfCompletedStepsDuringTheDay)
         } catch {
-            print("DEBUG: Catching error for fetching bearer token")
+            print("DEBUG: Catching error for posting steps for today \(error.localizedDescription)")
         }
     }
     
