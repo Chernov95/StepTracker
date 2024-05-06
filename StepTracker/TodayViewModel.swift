@@ -19,8 +19,7 @@ class TodayViewModel: ObservableObject {
     init(stepCountsPerHour: [HourlyActivity],
          totalNumberOfCompletedStepsDuringTheDay: Int,
          percentOfCompletedSteps: Int,
-         targetedNumberOfSteps: Int
-    ) {
+         targetedNumberOfSteps: Int) {
         self.stepCountsPerHour = stepCountsPerHour
         self.percentOfCompletedSteps = percentOfCompletedSteps
         self.targetedNumberOfSteps = targetedNumberOfSteps
