@@ -69,7 +69,11 @@ extension ContentViewModel {
         // Define the hourly interval
         var dateComponents = DateComponents()
         dateComponents.hour = 1
-        let stepCountType = HKObjectType.quantityType(forIdentifier: .stepCount)!
+        
+        guard let stepCountType = HKObjectType.quantityType(forIdentifier: .stepCount) else {
+            print("Failed to define hourly interval")
+            return
+        }
         // Create the query
         let query = HKStatisticsCollectionQuery(quantityType: stepCountType,
                                                 quantitySamplePredicate: nil,

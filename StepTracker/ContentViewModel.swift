@@ -12,7 +12,6 @@ enum Tabs: String {
     case today = "Today"
     case history = "History"
 }
-
 @MainActor
 class ContentViewModel: ObservableObject {
     @Published var hourlyActivityData: [HourlyActivity] = []
@@ -30,13 +29,12 @@ class ContentViewModel: ObservableObject {
     let constants = Constants()
     var idOfStepsDataForTodayInBackend: Int? = nil
     var backEndHasToBeUpdatedWithTodaysActivity: Bool? = nil
-    let userName = "pylypcheg12345"
+    let userName = "pylypcheg123456"
     
     init() {
         retrieveStepCountsForTodayFromLocalStorage()
     }
     
-    @MainActor
     func fetchBearerToken() async {
         do {
             bearerToken = try await networkManager.fetchBearerToken()
