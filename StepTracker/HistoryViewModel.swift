@@ -42,6 +42,13 @@ class HistoryViewModel: ObservableObject {
         mapStepsDataResponce(from: stepsData)
     }
     
+    func daysInCurrentMonth() -> Int {
+        let currentDate = Date()
+        let calendar = Calendar.current
+        let range = calendar.range(of: .day, in: .month, for: currentDate)!
+        return range.count
+    }
+
     private func fetchAndMapUserStepDataFromBackend() async -> [StepDataResponce] {
         do {
             let response = try await networkManager.fetchUserStepData(bearerToken: bearerToken, userName: userName)
@@ -111,7 +118,7 @@ class HistoryViewModel: ObservableObject {
         // Map filtered data to MonthlyActivity structs
         return thisMonthData.map { data in
             let dayOfMonth = getDayOfMonth(from: data.stepsDate)
-            return MonthlyActivity(date: dayOfMonth, numberOfSteps: data.stepsTotalByDay)
+            return MonthlyActivity(dayNumber: dayOfMonth, numberOfSteps: data.stepsTotalByDay)
         }
     }
 

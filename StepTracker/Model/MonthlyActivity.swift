@@ -8,6 +8,6 @@
 import Foundation
 
 struct MonthlyActivity {
-    let date: Int
+    let dayNumber: Int
     let numberOfSteps: Int
 }

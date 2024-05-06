@@ -64,11 +64,11 @@ struct HistoryView: View {
             if viewModel.activityForTheMonth.isEmpty {
                 return AnyView(ProgressView())
             } else {
-                return AnyView(Chart(viewModel.activityForTheMonth, id: \.date) { day in
+                return AnyView(Chart(viewModel.activityForTheMonth, id: \.dayNumber) { day in
                     BarMark(
-                        x: .value(viewModel.constants.dateTitle, day.date),
+                        x: .value(viewModel.constants.dateTitle, day.dayNumber),
                         y: .value(viewModel.constants.stepsTitle, day.numberOfSteps),
-                        width: viewModel.constants.barMarkWidthForOneMonth
+                        width: viewModel.constants.barMarkWidthForSevenDays
                     )
                     .annotation(position: .top) {
                         Text("\(day.numberOfSteps)")
@@ -78,6 +78,7 @@ struct HistoryView: View {
                 }
                     .chartScrollableAxes(.horizontal)
                     .chartXVisibleDomain(length: viewModel.constants.chartVisibleDomainLengthForOneMonth)
+                    .chartXScale(domain: 1...viewModel.daysInCurrentMonth())
                 )
             }
         }

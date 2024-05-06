@@ -27,7 +27,7 @@ class ContentViewModel: ObservableObject {
     let networkManager = NetworkManager.shared
     let targetedNumberOfSteps = 10_000
     let constants = Constants()
-    let userName = "pylypcheg123456"
+    let userName = "pylypcheg1234567"
     var idOfStepsDataForTodayInBackend: Int? = nil
     var backEndHasToBeUpdatedWithTodaysActivity: Bool? = nil
     
