@@ -22,7 +22,6 @@ class ContentViewModel: ObservableObject {
     @Published var healthDataAuthorizationHasBeenGranted = false
     @Published var bearerToken: String? = nil
 
-    
     let healthStore = HKHealthStore()
     let networkManager = NetworkManager.shared
     let targetedNumberOfSteps = 10_000

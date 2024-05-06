@@ -129,7 +129,7 @@ extension ContentViewModel {
     func getPercentOfCompletedSteps() -> Int {
         (totalNumberOfCompletedStepsDuringTheDay  * 100) / targetedNumberOfSteps
     }
-    
+    //MARK: Needs to be replaced saving logic with CoreData
     private func saveOrUpdateStepCountsForTodayInLocalStorage(_ stepCounts: [(date: Date, stepCount: Int)]) {
         let defaults = UserDefaults.standard
         let dateFormatter = DateFormatter()
