@@ -14,7 +14,6 @@ enum Periods: String {
     case monthly = "1 Month"
 }
 
-
 class HistoryViewModel: ObservableObject {
     @Published var selectedPeriod: Periods = .weekly
     @Published var activityForTheWeek = [WeeklyActivity]()
@@ -27,6 +26,7 @@ class HistoryViewModel: ObservableObject {
         self.bearerToken = bearerToken
         self.userName = userName
         self.networkManager = networkManager
+        print("Bearer token is \(bearerToken)")
     }
     
     @MainActor
@@ -47,7 +47,7 @@ class HistoryViewModel: ObservableObject {
     
     private func mapToLastSevenDaysActivity(from data: [StepDataResponce]) -> [WeeklyActivity] {
         let calendar = Calendar.current
-        let today = Date()
+        let today = calendar.startOfDay(for: Date())
         
         // Filter data for the last 7 days
         let lastSevenDaysData = data.filter { response in
@@ -55,8 +55,9 @@ class HistoryViewModel: ObservableObject {
                 print("Failed to parse date from string: \(response.stepsDate)")
                 return false
             }
-            return calendar.isDate(date, inSameDayAs: today) ||
-                   calendar.dateComponents([.day], from: date, to: today).day! < 7
+            let roundedDate = calendar.startOfDay(for: date)
+            let daysDifference = calendar.dateComponents([.day], from: roundedDate, to: today).day ?? 0
+            return daysDifference >= 0 && daysDifference < 7
         }
         
         // Group data by day

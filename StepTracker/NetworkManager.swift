@@ -149,6 +149,7 @@ class NetworkManager {
     }
     // Function which returns tutple for checking whether backend has to be updated with the new data from health kit.
     // It takes into account scenario where we fail to determine if backend has to be updated or not. That's why values are optional
+    // TODO: Needs rethinking
     func getInformationIfStepsDataForTodayIsInBackendAndItHasToBeUpdated(bearerToken: String, userName: String, totalNumberOfCompletedStepsDuringTheDay: Int) async throws -> (updateIsRequired: Bool?, idOfStepsDataForTodayInBackend: Int?) {
         guard let stepsURL = URL(string: "\(Endpoint.baseURL)\(Endpoint.steps)?username=\(userName)&steps_date=\(getTodaysShortVersionDate())") else {
             print("Invalid url for gettng information if Steps Data For Today Is In Backend And It Has ToBeUpdated")
